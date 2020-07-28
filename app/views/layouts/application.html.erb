@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Folio</title>
+    <%= render 'layouts/metatags' %>
+    <%= render 'layouts/rails_default' %>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="icon"  href="/favicon.ico" sizes="16x16" />
+  </head>
+
+  <body>
+  <div class="container-fluid ">
+    <%= render 'layouts/navigation' %>
+
+   <div id="body">
+      <%= render 'layouts/messages' %>
+      <%= yield %>
+   </div>
+  </div>
+
+   <div class="footer navbar-fixed-bottom">
+      <%= render 'layouts/footer'  %>
+      <%# debug(params)   %>
+   </div>
+  </body>
+</html>

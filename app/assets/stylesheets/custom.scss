@@ -1,0 +1,367 @@
+@import "bootstrap";
+
+/* mixins, variables, etc. */
+$gray-base:              #000 !default;
+$gray-darker:            lighten($gray-base, 13.5%) !default; // #222
+$gray-dark:              lighten($gray-base, 20%) !default;   // #333
+$gray:                   lighten($gray-base, 33.5%) !default; // #555
+$gray-light:             lighten($gray-base, 46.7%) !default; // #777
+$gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
+
+$brand-info:            #5bc0de !default;
+$state-danger-text:     #a94442 !default;
+
+$gray-medium-light: #eaeaea;
+$spacer: 1rem !default;
+
+@mixin box_sizing {
+  -moz-box-sizing:    border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing:         border-box;
+}
+
+/* universal */
+
+html,body {
+  height: 100%;
+  padding-top: 0; 
+  padding-bottom: 40px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+p.medium {
+//    padding: .8em 1.0;
+    line-height: 1.4em;
+    text-align: justify;
+    font: Arial, Helvetica, sans-serif;
+}
+
+p {
+    padding: .8em 1.0;
+    line-height: 1.3em;
+    text-align: justify;
+    font: Arial, Helvetica, sans-serif;
+    font-size: 1.0em;
+}
+
+table {
+  width: 100%;
+}
+
+#body {
+   padding-top: 3em; 
+   clear: both;
+}
+
+/* navbar */
+
+.navbar-light {
+    padding-right: 5px;
+    font-size: 15px;
+    height: 50px;
+}
+
+.navbar-nav > .active > a,
+.navbar-nav > .active > a:hover,
+.navbar-nav > .active > a:focus {
+    color: red;
+    background-color: white;
+}
+
+.navbar-brand {
+  font-size: 25px;
+}
+
+section {
+  overflow: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.center {
+  text-align: center;
+  h1 {
+    margin-bottom: 8px;
+  }
+}
+
+.hidden {
+   display: none;
+}
+
+/* typography */
+
+td.hlight {
+  font-weight: bold;
+  color: red;
+}
+
+/* header */
+
+
+/* footer */
+
+footer {
+  position: fixed;
+  height: 35px;
+  bottom: 0;
+  width: 100%;
+
+  margin-right: 5px;
+  margin-left: 5px;
+  padding-top: 7px;
+  border-top: 1px solid $gray-medium-light;
+  color: $gray-light;
+  a {
+    color: $gray;
+    &:hover {
+      color: $gray-darker;
+    }
+  }
+  small {
+    float: left;
+  }
+  ul {
+    float: right;
+    margin-right: 15px;
+    list-style: none;
+    li {
+      float: left;
+      margin-left: 15px;
+    }
+  }
+}
+
+/* miscellaneous */
+
+.bottom_buttons {
+  padding-top: 20px;
+  margin-left: 20px;
+}
+
+.bottom_nav {
+  display: flex;
+  justify-content: flex-end;
+}
+/* sidebar */
+
+aside {
+  section.user_info {
+    margin-top: 25px;
+  }
+  section {
+    padding: 10px 0;
+    margin-top: 20px;
+    &:first-child {
+      border: 0;
+      padding-top: 0;
+    }
+    span {
+      display: block;
+      margin-bottom: 3px;
+      line-height: 1;
+    }
+    h1 {
+      font-size: 1.4em;
+      text-align: left;
+      letter-spacing: -1px;
+      margin-bottom: 3px;
+      margin-top: 0px;
+    }
+  }
+}
+
+/* forms */
+
+select {
+    vertical-align:top;
+//    height:25px;
+}
+
+#error_explanation {
+  color: red;
+  ul {
+    color: red;
+    margin: 0 0 30px 0;
+  }
+}
+
+.field_with_errors {
+  @extend .has-error !optional
+  .form-control {
+    color: $state-danger-text;
+  }
+}
+
+.tbl {
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.text-center {
+   text-align: center;   
+}
+
+/* Table with adjustable column widths */
+/* Column widths are based on these cells */
+.tbl_xxs {
+  width: 1%;	
+}
+.tbl_xs {       /* ver, sex, age */
+  width: 2%;
+}
+.tbl_sm {       /* File# */
+  width: 4%;
+}
+.tbl_lsm {      /* Dates */ 
+  width: 6%;
+}
+.tbl_xmd {      /* Phones */
+  width: 8%;
+}
+.tbl_md {      
+  width: 10%;
+}
+.tbl_lmd {      /* full name */
+  width: 15%;
+}
+.tbl_xlg {      
+  width: 20%;
+}
+.tbl_lg {      /* address */
+  width: 25%;
+}
+.tbl_llg {
+  width: 30%;
+}
+
+.tbl td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tbl th {
+  background: grey;
+  color: white;
+  height: 25px;
+}
+
+.td-center {
+  text-align: center;
+}
+
+// Temp!!!!
+.tbl2 th {
+  background: $brand-info; //#5bc0de;
+  color: white;
+  height: 28px;
+  padding: 2px;
+}
+.tbl2 th,td {
+  font-size: 1em;
+  padding: 2px 5px;
+}
+
+.tbl td,
+.tbl th {
+  text-align: left;
+  padding: 0px 5px;
+  font-size: 1em;
+}
+
+.tbl tr:nth-child(even) {
+  background: lightblue;
+}
+
+.table-hover tbody tr:hover td {
+    background: $gray-lighter; //#5bc0de;
+}
+
+.alert div,
+.alert span{
+    padding-left: 5px;
+    padding-right: 15px;
+//    display:table-cell;
+//    line-height:30px;
+}
+
+.panel-heading {
+	font-weight: 800;
+}
+
+.panel-body {
+    word-wrap: break-word;
+    max-height: 200px;
+    overflow-y: scroll;
+    padding: 0;
+}
+
+// Chrome doesn't display scrollbar sometimes. Force it.
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+}
+
+#modal-window {
+  position: fixed;
+  top: 3%;
+  left: 5%;
+//  transform: translate(-50%, -50%);
+}
+.modal-title {
+   font-size: 18px;
+}
+
+.turbolinks-progress-bar {
+   height: 3px;
+   background-color: blue;
+}
+
+// Safari modals - doesnt really work, but maybe one day..
+.clickable {
+cursor: pointer;
+}
+
+
+// Simple form tool tips
+
+.has-tip:after{
+  font-family: "Glyphicons Halflings";
+  content: " \e085";
+  color: #aaa;
+}
+
+.updated{
+  padding: .25em 0 2.5em;
+  color: #b9b9b9;
+  font-size: .9em;
+}
+
+.table-responsive {
+  overflow-y: visible !important;
+}
+
+
+// Move page down to make anchors visible
+:target {
+  display: block;
+  position: relative;
+  top: -60px;
+  visibility: hidden;
+}
+
+// text control height:
+.string, .select {
+height:38px;
+}
+  

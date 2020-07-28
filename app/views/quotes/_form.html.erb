@@ -1,0 +1,16 @@
+<%# simple_form_for @quote, url: quotes_get_path do |f| %>
+<%= simple_form_for @quote  do |f| %>
+  
+<div class="row no-gutters">
+  <div class="col-md-1 col-sm-4">
+  <%= f.input :symbol, label: false, placeholder: 'Symbol' %>
+  </div>
+  <div class="col-md-1 col-sm-3">
+    <%= f.input :exch, collection: [['Canada', '-CT'], ['United States', '']],  include_blank: false, label: false, placeholder: 'Exchange', input_html: {style: "width: 160px"} %>
+  </div>
+  <div class="col-md-2 col-sm-2 mr-auto">
+  <%= f.submit 'Get Quote', class: "btn btn-primary" %>
+  </div>
+</div>
+
+<% end %>

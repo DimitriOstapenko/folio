@@ -1,0 +1,6 @@
+<% if @quote.present? %>
+  <%= @quote.symbol %> <%= @quote.name %> <%= @quote.exchange %>:  Latest price:  <%= @quote.latest_price %> as of <%= @quote.latest_update %>
+<% else %>
+  Please enter symbol
+<% end %>
+

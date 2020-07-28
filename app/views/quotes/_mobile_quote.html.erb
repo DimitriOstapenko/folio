@@ -1,0 +1,14 @@
+<tr>
+  <td class="tbl_sm text-center"><%= quote.symbol %></td>
+  <td class="text-center"><%= quote.latest_price %></td>
+  <td class="text-center"><%= quote.prev_close %></td>
+  <td class="text-center"><%= quote.change %></td>
+  <td class="text-center"><%= quote.change_percent_s %></td>
+  <td class="text-center"><%= quote.week52high %></td>
+  <td class="text-center"><%= quote.week52low %></td>
+  <td class="text-center"><%= quote.ytd_change_str %>%</td>
+  <td class="tbl_md text-center"><%= quote.latest_update %></td>
+  <td class="text-center"><%= link_to '<i class="fas fa-sync-alt"></i>'.html_safe, quote_path(quote), method: :patch  %> </td>
+  <td class="text-center"><%= link_to '<i class="far fa-trash-alt"></i>'.html_safe, quote, method: :delete, data: { confirm: "Are you sure you want to delete quote for #{quote.symbol}?" } %> </td>
+</tr>
+

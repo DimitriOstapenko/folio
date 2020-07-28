@@ -1,0 +1,23 @@
+<table class="tbl2 table-hover table-striped table-bordered" >
+  <thead>
+      <tr>
+        <th class="tbl_sm text-center">Symbol</th>
+        <th class="text-center">Price</th>
+        <th class="text-center">Prev.close</th>
+        <th class="text-center">Change</th>
+        <th class="text-center">Change %</th>
+        <th class="text-center">52wk High</th>
+        <th class="text-center">52wk Low</th>
+        <th class="text-center">ytd Change</th>
+        <th class="tbl_md text-center">As Of</th>
+        <th></th>
+        <th></th>
+      </tr>
+  </thead>
+  <tbody>
+
+  <%= render @quotes, cached: true %>
+
+  </tbody>
+</table>
+
