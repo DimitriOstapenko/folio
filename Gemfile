@@ -25,6 +25,10 @@ gem 'jquery-rails'
 gem 'select2-rails'
 gem 'popper_js', '~> 1.14.3'
 gem 'iex-ruby-client', '~> 1.1', '>= 1.1.2'
+gem 'devise', '~> 4.7', '>= 4.7.2'
+#gem 'font-awesome-rails', '~> 4.7', '>= 4.7.0.5'
+gem 'font-awesome-sass', '~> 5.13'
+
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'

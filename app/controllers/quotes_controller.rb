@@ -1,5 +1,6 @@
 class QuotesController < ApplicationController
   before_action :set_quote, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user
 
   def index 
     @quote = Quote.new
@@ -13,26 +14,29 @@ class QuotesController < ApplicationController
   def create
     symbol = params[:quote][:symbol].strip.upcase rescue nil
     exch = params[:quote][:exch] rescue '-CT'
+#    flash[:info] = 'Got quote'
     @quote = Quote.find_by(symbol: symbol, exch: exch)
     if @quote
       @quote.fetch && @quote.save if @quote.expired?
+      redirect_to @quote
     else
       @quote = Quote.new(symbol: symbol, exch: exch)
       @quote.fetch 
       if @quote.errors.any?
         flash[:info] = @quote.errors.full_messages.to_sentence
+        redirect_to quotes_path
       else
         @quote.save
+        redirect_to @quote
       end
     end
-    redirect_to quotes_path
   end
 
   def edit
   end
 
   def update
-    @quote.fetch 
+    @quote.fetch && @quote.save
     if @quote.errors.any?
       flash[:info] = @quote.errors.full_messages.to_sentence
     else
@@ -42,6 +46,7 @@ class QuotesController < ApplicationController
   end
 
   def show
+    @quote.fetch && @quote.save if @quote.expired?
   end
 
   def destroy

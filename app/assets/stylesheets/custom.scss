@@ -1,4 +1,6 @@
 @import "bootstrap";
+@import "font-awesome-sprockets";
+@import "font-awesome";
 
 /* mixins, variables, etc. */
 $gray-base:              #000 !default;
@@ -136,6 +138,11 @@ footer {
   }
 }
 
+.mobile_footer {
+  font-size: 10px;
+  color: $gray;
+}
+
 /* miscellaneous */
 
 .bottom_buttons {
@@ -177,9 +184,29 @@ aside {
 
 /* forms */
 
+#user_remember_me, #user_activated {
+  width: 30px;
+}
+
+/* remember_me label */
+.form-check-label {
+ padding-left: 7px;
+ }
+
+input, textarea, select, .uneditable-input {
+  border: 1px solid #bbb;
+  width: 100%;
+  margin-bottom: 10px;
+  @include box_sizing;
+}
+
+input {
+  height: auto !important;
+}
+
 select {
     vertical-align:top;
-//    height:25px;
+    height:25px;
 }
 
 #error_explanation {
@@ -280,6 +307,12 @@ select {
 
 .table-hover tbody tr:hover td {
     background: $gray-lighter; //#5bc0de;
+}
+
+
+.table-wrapper-scroll-x {
+ display: block;
+ overflow: auto;
 }
 
 .alert div,

@@ -1,6 +1,30 @@
+<div class="d-inline-flex h-25">
 <% if @quote.present? %>
-  <%= @quote.symbol %> <%= @quote.name %> <%= @quote.exchange %>:  Latest price:  <%= @quote.latest_price %> as of <%= @quote.latest_update %>
+   <div class="card card-body bg-light">
+     <h3><%= @quote.name %> (<%= @quote.symbol %>)  <%= link_to '<i class="fas fa-sync-alt"></i>'.html_safe, @quote, method: :patch  %> </h3>
+     <small> <%= @quote.exchange %> </small>
+     <div class="pt-3">
+       <% color = @quote.change > 0 ? 'green' : 'red' %>
+       <h2 class="mb-0"><%= @quote.latest_price %> <small><font color="<%= color %>"><%= sprintf('%+.2f', @quote.change) %> (<%= @quote.change_percent_s %>)</font></small></h2>
+       <small> as of <%= @quote.latest_update %></small>
+         <table class="tbl2 table-hover_ table-striped table-condensed" >
+           <tbody>
+             <tr><td> Prev Close: </td><td><%= sprintf('%.2f', @quote.prev_close)  %> </td> </tr>
+             <tr><td> Volume: </td><td><%= @quote.volume.to_i.to_s(:delimited)  %> </td> </tr>
+             <tr><td> Ytd:</td><td><%= sprintf('%+.2f', @quote.ytd_change) %>% </td></tr>
+             <tr><td> Day high : </td><td><%= sprintf('%.2f', @quote.high) %></td></tr>
+             <tr><td> Day low : </td><td><%= sprintf('%.2f', @quote.low) %></td></tr>
+             <tr><td> 52 wk high : </td><td><%= sprintf('%.2f', @quote.week52high) %></td></tr>
+             <tr><td> 52 wk low : </td><td><%= sprintf('%.2f', @quote.week52low) %></td></tr>
+             <tr><td> Market Cap : </td><td><%= @quote.market_cap.to_i.to_s(:delimited) %></td></tr>
+             <tr><td> P/e ratio : </td><td><%= sprintf('%.2f', @quote.pe_ratio) %></td></tr>
+         </tbody>
+         </table>
+     </div>
+   </div>
+   </div>
 <% else %>
   Please enter symbol
 <% end %>
+  </div>
 
