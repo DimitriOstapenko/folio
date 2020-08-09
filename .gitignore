@@ -35,3 +35,6 @@
 # ignore Postgres backups
 /pgbackup/*.*
 
+# Ignore vendor bundle
+/vendor/*
+
