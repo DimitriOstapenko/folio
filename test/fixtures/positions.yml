@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  symbol: MyString
+  exch: MyString
+  avg_price: 1.5
+  qty: 1.5
+  currency: MyString
+
+two:
+  symbol: MyString
+  exch: MyString
+  avg_price: 1.5
+  qty: 1.5
+  currency: MyString
