@@ -17,6 +17,16 @@ def device_is_desktop?
   device_type == 'desktop'
 end
 
+def mobile_device?
+  device_type == 'mobile'
+end
+
+def sortable(column, title = nil)
+      title ||= ActiveSupport::Inflector.titleize(column)
+      direction = (sort_direction == "asc") ? "desc" : "asc"
+      link_to title, { direction: direction, sort: column, findstr: params[:findstr] }, class: "hdr-link"
+end
+
 def num_to_phone( phone, area_code = true )
   number_to_phone(phone, area_code: :true) rescue ''
 end

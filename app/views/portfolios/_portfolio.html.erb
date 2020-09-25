@@ -1,0 +1,12 @@
+<tr>
+<td class="text-center"><%= link_to portfolio.name, portfolio_positions_path(portfolio) %></td>
+<td class="text-center"><%= portfolio.positions.count %></td>
+<td class="text-center"><%= portfolio.currency %></td>
+<td class="text-center"><%= portfolio.cash_in %></td>
+<td class="text-center"><%= to_currency(portfolio.acb) %></td>
+<td class="text-center"><%= to_currency(portfolio.curval) %></td>
+<td class="text-center"><%= to_currency(portfolio.gain) %></td>
+<td class="text-center"><%= portfolio.gain_pc %></td>
+<td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_path(portfolio) %> </td>
+  <td class="text-center"><%= link_to '<i class="far fa-trash-alt"></i>'.html_safe, portfolio, method: :delete, data: { confirm: "Are you sure you want to delete portfolio #{portfolio.name}?" } %> </td>
+</tr>

@@ -4,8 +4,8 @@
   <div class="col-md-1 col-sm-2">
   <%= f.input :symbol, label: false, placeholder: 'Symbol' %>
   </div>
-  <div class="col-md-1 col-sm-3">
-    <%= f.input :exch, collection: [['Canada', '-CT'], ['United States', ''], ['Fx', 'fx'], ['Commodity', 'comm']], include_blank: false, label: false, placeholder: 'Exchange', :wrapper =>:horizontal_range, input_html_: {style: "width: 150px"} %>
+  <div class="col-md-2 col-sm-3">
+    <%= f.input :exch, collection: [['Canada', '-CT'], ['United States', ''], ['Fx', 'fx'], ['Commodity', 'comm']], include_blank: false, label: false %>
   </div>
   <div class="col-md-1 col-sm-2">
   <%= f.submit 'Get Quote', class: "btn btn-primary" %>

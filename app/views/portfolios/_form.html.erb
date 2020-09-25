@@ -1,0 +1,23 @@
+<%= simple_form_for @portfolio do |f| %>
+  <%# render 'shared/error_messages', object: f.object %>
+  <%= render 'shared/generic_error', object: f.object %>
+
+  <div class="row">
+  <div class="col-6">
+  <%= f.input :name, hint: "Portfolio name" %>
+  </div>
+  <div class="col-md-3">
+  <%= f.input :currency, collection: CURRENCIES, include_blank: false %>
+  </div>
+  <div class="col-md-3">
+  <%= f.input :cash_in, as: :string  %>
+  </div>
+  </div>
+
+  <div class="row">
+  <div class="col-md-12">
+  <%= f.submit yield(:button_text), class: "btn btn-primary btn-block" %>
+  </div>
+  </div>
+
+<% end %>

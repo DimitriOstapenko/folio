@@ -4,7 +4,7 @@
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ml-auto ">
       <% if current_user %>
-        <li class="nav-item"><%= link_to "Portfolios", root_path, class: "nav-link" %></li>
+        <li class="nav-item"><%= link_to "Portfolios", portfolios_path, class: "nav-link" %></li>
         <li class="nav-item"><%= link_to "Quotes", quotes_path, class: "nav-link" %></li>
       <% else %>
         <li class="login_link"><%= link_to "<i class='fa fa-sign-in-alt'></i> Login".html_safe, new_user_session_path %></li>

@@ -4,6 +4,9 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :quotes
+  resources :quotes #, :users
+  resources :portfolios do
+    resources :positions #, only: [:index, :show, :create, :destroy]
+  end
 
 end

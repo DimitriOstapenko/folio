@@ -1,0 +1,21 @@
+<% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+<table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
+  <thead>
+      <tr>
+          <th class="tbl_sm, text-center">Symbol</th>
+          <th class="tbl_md, text-center">Exchange</th>
+          <th class="tbl_md, text-center">Avg. Price</th>
+          <th class="tbl_md, text-center">Qty %</th>
+          <th class="tbl_md, text-center">Currency </th>
+          <th></th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+
+  <%= render @positions %>
+
+  </tbody>
+</table>
+
+<%= button_to "Add Position", new_portfolio_position_path(@portfolio), class: "btn btn-primary col-md-2", method: :get %>

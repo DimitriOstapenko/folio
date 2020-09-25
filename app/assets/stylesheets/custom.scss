@@ -1,6 +1,11 @@
 @import "bootstrap";
+
 @import "font-awesome-sprockets";
 @import "font-awesome";
+
+
+$theme-colors: ( "bootstrap": #563d7c, "simpleform": #00617f );
+@import "simple_form-bootstrap/simple_form-bootstrap";
 
 /* mixins, variables, etc. */
 $gray-base:              #000 !default;
@@ -12,6 +17,7 @@ $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
 $brand-info:            #5bc0de !default;
 $state-danger-text:     #a94442 !default;
+
 
 $gray-medium-light: #eaeaea;
 $spacer: 1rem !default;
@@ -196,7 +202,7 @@ aside {
 input, textarea, select, .uneditable-input {
   border: 1px solid #bbb;
   width: 100%;
-  margin-bottom: 10px;
+//  margin-bottom: 10px;
   @include box_sizing;
 }
 
@@ -205,8 +211,9 @@ input {
 }
 
 select {
-    vertical-align:top;
-    height:25px;
+//    vertical-align:top;
+//    height:25px;
+//  background: none !important;  // remove double caret
 }
 
 #error_explanation {
@@ -319,9 +326,12 @@ select {
 .alert span{
     padding-left: 5px;
     padding-right: 15px;
-//    display:table-cell;
-//    line-height:30px;
+//    line-height:40px;
 }
+
+.alert-alert {
+    background-color: #ffc107;
+    }
 
 .panel-heading {
 	font-weight: 800;
@@ -395,6 +405,6 @@ cursor: pointer;
 
 // text control height:
 .string, .select {
-height:38px;
+//height:38px;
 }
   

@@ -26,7 +26,7 @@
 //
 
 $(document).on('turbolinks:load', function(){
-    $(".alert-info").delay(2000).slideUp(500, function(){
+    $(".alert-dismissible").delay(2000).slideUp(500, function(){
           $(".alert").alert('close');
       });
     });
