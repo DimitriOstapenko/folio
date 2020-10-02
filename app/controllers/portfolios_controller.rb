@@ -11,7 +11,7 @@ class PortfoliosController < ApplicationController
     @total_acb = @portfolios.sum{|p| p.acb} 
     @total_curval = @portfolios.sum{|p| p.curval} 
     @total_gain = @portfolios.sum{|p| p.gain} 
-    @total_gain_pc = @portfolios.sum{|p| p.gain_pc} / @portfolios.size
+    @total_gain_pc = @portfolios.sum{|p| p.gain_pc} / @portfolios.size rescue 0
     @total_cad_value = @portfolios.sum{|p| p.curval*p.fx_rate}
   end
 
