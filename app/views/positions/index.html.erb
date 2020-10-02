@@ -1,12 +1,18 @@
 <% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
+  <caption><%= @portfolio.name %> portfolio: positions </caption>
   <thead>
       <tr>
-          <th class="tbl_sm, text-center">Symbol</th>
-          <th class="tbl_md, text-center">Exchange</th>
-          <th class="tbl_md, text-center">Avg. Price</th>
-          <th class="tbl_md, text-center">Qty %</th>
-          <th class="tbl_md, text-center">Currency </th>
+          <th class="text-center">Symbol</th>
+          <th class="text-center">Exchange</th>
+          <th class="text-center">Quantity</th>
+          <th class="text-center">Avg. Price</th>
+          <th class="text-center">Currency </th>
+          <th class="text-center">ACB (<%= @portfolio.currency_str %>) </th>
+          <th class="text-center">Cur. Value </th>
+          <th class="text-center">Gain</th>
+          <th class="text-center">Gain %</th>
           <th></th>
           <th></th>
       </tr>
@@ -16,6 +22,18 @@
   <%= render @positions %>
 
   </tbody>
+  <tfoot>
+    <th colspan=5></th>
+    <th class="text-center"><%= to_currency @portfolio.acb %></th>
+    <th class="text-center"><%= to_currency @portfolio.curval %></th>
+    <th class="text-center"><%= to_currency @portfolio.gain %></th>
+    <th class="text-center"><%= sprintf "%.2f", @portfolio.gain_pc %>%</th>
+    <th colspan=2></th>
+  </tfoot>
 </table>
 
-<%= button_to "Add Position", new_portfolio_position_path(@portfolio), class: "btn btn-primary col-md-2", method: :get %>
+<div class="row">
+  <div class="col-2">
+    <%= button_to "Add Position", new_portfolio_position_path(@portfolio), class: "btn btn-primary", method: :get %>
+  </div>
+</div>

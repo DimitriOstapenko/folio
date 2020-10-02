@@ -25,8 +25,9 @@
 //= require tooltip.js
 //
 
+// REMOVE 2 after alert-dismissible TO SLIDE UP !!
 $(document).on('turbolinks:load', function(){
-    $(".alert-dismissible").delay(2000).slideUp(500, function(){
+    $(".alert-dismissible2").delay(2000).slideUp(500, function(){
           $(".alert").alert('close');
       });
     });

@@ -15,6 +15,7 @@ class Quote < ApplicationRecord
     self.week52high ||= 0
     self.week52low ||= 0
     self.pe_ratio ||= 0
+    self.latest_price = 1
   end
 
 # Canadian symbols EOD only; US is real time  
@@ -37,13 +38,12 @@ class Quote < ApplicationRecord
     self.ytd_change.round(2) rescue 0.00
   end
 
+
 # Class Methods:
-# returns db cached quote if present, last night's quote otherwise 
+# returns new quote object, filled 
   def self.get( symbol, exch = '-CT' ) 
     symbol = symbol.strip.upcase rescue nil
     return unless symbol
-    cached = Quote.where("symbol=? AND exch=?", symbol, exch).first
-    return cached if cached.present?
     quote = new(symbol: symbol, exch: exch)
     quote.fetch
   end
@@ -61,8 +61,7 @@ class Quote < ApplicationRecord
 # Only EURCAD and USDCAD fx are supported right now (fetch_fx below supports all)
 def fetch 
   return fetch_gold_silver if symbol == 'XAUUSD' || symbol == 'XAGUSD'
-  return fetch_usdeur_fx if symbol == 'EUR' || symbol == 'USD'
-  return fetch_fx if self.exch == 'fx' 
+  return fetch_usdcad if symbol = 'EUR' || symbol = 'USD'
   return fetch_commodity if self.exch == 'comm'
   q = IEX_CLIENT.quote(self.symbol + self.exch) rescue nil
   if q
@@ -90,20 +89,17 @@ end
 
 # Currency quotes: symbols 6 characters long
 def fetch_fx
-  (errors.add(:symbol, "Unrecognized Fx symbol: must be 6 characters"); return self ) unless self.symbol.length == 6  
+  (errors.add(:symbol, "Unrecognized Fx symbol: must be 6 characters"); return self; ) unless self.symbol.length == 6  
   self.name = "#{self.symbol[0,3]}/#{self.symbol[3,3]} Exchange Rate" 
   self.latest_price = IEX_CLIENT.get('/fx/latest/', symbols: self.symbol, token: Rails.application.credentials[:iex][:secret_token] )[0]['rate'] rescue 0
   self.latest_update = Time.now
   self
 end
 
-# USDCAD | EURCAD
-def fetch_usdeur_fx
-  sym = "#{self.symbol}CAD"
-  self.name = "#{sym} Exchange Rate"
-  self.latest_price = IEX_CLIENT.get('/fx/latest/', symbols: sym, token: Rails.application.credentials[:iex][:secret_token] )[0]['rate'] rescue 0
-  self
-end
+def fetch_usd_cad_fx
+  sym = "#{self.symbol[0,3]}/CAD"
+  self.name = "#{self.symbol[0,3]}/CAD Exchange Rate"
+  self.latest_price = IEX_CLIENT.get('/fx/latest/', symbols: self.symbol, token: Rails.application.credentials[:iex][:secret_token] )[0]['rate'] rescue 0
 
 def fetch_gold_silver
   self.latest_update = Time.now

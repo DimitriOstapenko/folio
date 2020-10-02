@@ -3,40 +3,65 @@ class Portfolio < ApplicationRecord
   belongs_to :user
   has_many :positions, :dependent => :destroy
   validates :name, presence: true, length: { maximum: 50 }
-  validates :cash_in, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :cash, :currency, presence: true, numericality: true
 
   belongs_to :user
 
   before_validation :set_attributes!
 
   def set_attributes!
-    currency = :CDN
+    self.currency ||= :CDN
+    self.cash ||= 0.0
   end
 
-# Adjusted cost base across all positions  
+# Get current CAD exchange rate 
+  def fx_rate
+    case self.currency_sym
+    when  :USD
+      USDCAD
+    when :EUR
+      EURCAD
+    else
+      1
+    end
+  end
+  
+  def currency_str
+    CURRENCIES.invert[self.currency].to_s rescue nil
+  end
+
+  def currency_sym
+    CURRENCIES.invert[self.currency]
+  end
+
+# Adjusted cost base of all positions in portfolio currency
   def acb
-    acb = 0
-    self.positions.each do |pos|
-      acb += pos.avg_price * pos.qty
+    if self.positions.any?
+      self.positions.sum{|pos| pos.acb_base}
+    else
+      self.cash
     end
-    return acb
   end
 
+# Total market value of all equity positions in portfolio currency
   def curval
-    ttl = 0
-    self.positions.each do |pos|
-      quote = Quote.get(pos.symbol)
-      ttl += pos.qty * quote.latest_price
-    end
-    return ttl
+    self.positions.sum{|pos| pos.curval_base} + self.cash
   end
 
   def gain
-    self.curval - self.acb
+    if self.positions.any?
+       self.curval - self.acb - self.cash
+    else 
+       self.curval - self.acb
+    end 
   end
 
   def gain_pc
-    sprintf("%.2f", self.gain / self.acb * 100) rescue 0
+    self.gain / self.acb * 100 rescue 0
+  end
+
+  def total
+    self.curval * self.fx_rate
   end
 
 end

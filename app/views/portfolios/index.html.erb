@@ -1,17 +1,19 @@
 <% scroll = "table-wrapper-scroll-x" if mobile_device? %>
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
+  <caption> Portfolios </caption>
   <thead>
       <tr>
-          <th class="tbl_sm, text-center"><%= sortable 'name', 'Name' %></th>
-          <th class="tbl_md, text-center">Positions</th>
-          <th class="tbl_md, text-center"><%= sortable 'currency', 'Currency' %></th>
-          <th class="tbl_md, text-center">Cash In</th>
-          <th class="tbl_md, text-center"><%= sortable 'acb', 'ACB' %></th>
-          <th class="tbl_md, text-center">Current Value</th>
-          <th class="tbl_md, text-center">Gain</th>
-          <th class="tbl_md, text-center">Gain %</th>
-          <th class="tbl_md, text-center"></th>
-          <th class="tbl_md, text-center"></th>
+          <th class="text-center"><%= sortable 'name', 'Name' %></th>
+          <th class="text-center">Positions</th>
+          <th class="text-center"><%= sortable 'currency', 'Currency' %></th>
+          <th class="text-center">Cash</th>
+          <th class="text-center"><%= sortable 'acb', 'ACB' %></th>
+          <th class="text-center">Market Value</th>
+          <th class="text-center">Gain</th>
+          <th class="text-center">Gain %</th>
+          <th class="text-center">Total (CAD)</th>
+          <th class="text-center"></th>
+          <th class="text-center"></th>
       </tr>
   </thead>
   <tbody>
@@ -19,6 +21,16 @@
   <%= render @portfolios %>
 
   </tbody>
+   <tfoot>
+    <th colspan=3></th>
+    <th class="text-center"><%= to_currency @total_cash %></th>
+    <th class="text-center"><%= to_currency @total_acb %></th>
+    <th class="text-center"><%= to_currency @total_curval %></th>
+    <th class="text-center"><%= to_currency @total_gain %></th>
+    <th class="text-center"><%= sprintf "%.2f", @total_gain_pc %>%</th>
+    <th class="text-center"><%= to_currency @total_cad_value %></th>
+    <th colspan=2></th>
+  </tfoot>
 </table>
 
 <%= button_to "Add Portfolio", new_portfolio_path, class: "btn btn-primary col-md-2", method: :get %>

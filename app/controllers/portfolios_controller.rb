@@ -6,7 +6,13 @@ class PortfoliosController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   def index
-    @portfolios = Portfolio.all
+    @portfolios = current_user.portfolios
+    @total_cash = @portfolios.sum{|p| p.cash}
+    @total_acb = @portfolios.sum{|p| p.acb} 
+    @total_curval = @portfolios.sum{|p| p.curval} 
+    @total_gain = @portfolios.sum{|p| p.gain} 
+    @total_gain_pc = @portfolios.sum{|p| p.gain_pc} / @portfolios.size
+    @total_cad_value = @portfolios.sum{|p| p.curval*p.fx_rate}
   end
 
   def new
@@ -53,7 +59,7 @@ class PortfoliosController < ApplicationController
   end
 
   def portfolio_params
-    params.require(:portfolio).permit( :name, :currency, :cash_in )
+    params.require(:portfolio).permit( :name, :currency, :cash )
   end
 
   def sort_column

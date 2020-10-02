@@ -1,9 +1,14 @@
+<% locale =  position.currency_sym == :EUR ? :fr : :ca %>
 <tr>
-<td class="tbl_sm, text-center"><%= position.symbol %></td>
-<td class="tbl_md, text-center"><%= position.exch %></td>
-<td class="tbl_md, text-center"><%= position.avg_price %></td>
-<td class="tbl_md, text-center"><%= position.qty %></td>
-<td class="tbl_md, text-center"><%= position.currency %></td>
+<td class="text-center"><%= position.symbol %></td>
+<td class="text-center"><%= position.exchange %></td>
+<td class="text-center"><%= position.qty %></td>
+<td class="text-center"><%= to_currency position.avg_price, precision: 4, locale: locale %></td>
+<td class="text-center"><%= position.currency_str %></td>
+<td class="text-center"><%= to_currency position.acb %></td>
+<td class="text-center"><%= to_currency position.curval %></td>
+<td class="text-center"><%= to_currency position.gain %></td>
+<td class="text-center"><%= position.gain_pc %>%</td>
 <td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_position_path(@portfolio,position) %> </td>
 <td class="text-center"><%= link_to '<i class="far fa-trash-alt"></i>'.html_safe, portfolio_position_path(@portfolio,position), metdod: :delete, data: { confirm: "Are you sure you want to delete position #{position.symbol}?" } %> </td>
 </tr>
