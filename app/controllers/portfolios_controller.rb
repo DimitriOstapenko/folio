@@ -6,13 +6,30 @@ class PortfoliosController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   def index
-    @portfolios = current_user.portfolios
-    @total_cash = @portfolios.sum{|p| p.cash}
-    @total_acb = @portfolios.sum{|p| p.acb} 
-    @total_curval = @portfolios.sum{|p| p.curval} 
-    @total_gain = @portfolios.sum{|p| p.gain} 
-    @total_gain_pc = @portfolios.sum{|p| p.gain_pc} / @portfolios.size rescue 0
-    @total_cad_value = @portfolios.sum{|p| p.curval*p.fx_rate}
+    @currency =  params[:portfolio][:currency]  rescue nil
+    @base_currency = params[:portfolio][:base_currency] rescue nil
+    @portfolios = current_user.portfolios 
+    @portfolios = @portfolios.where(currency: @currency) if @currency.present?
+
+    if @currency.present?
+      @fx = 1 
+      @fx = eval "#{CURRENCIES.invert[@currency.to_i]}#{CURRENCIES.invert[@base_currency.to_i]}"  if @currency != @base_currency
+      @total_cash = @portfolios.sum{ |p| p.cash } * @fx
+      @total_acb = @portfolios.sum{ |p| p.acb } * @fx
+      @total_curval = @portfolios.sum{ |p| p.curval } * @fx 
+    else
+      @fx = 1
+      @fx = eval "CAD#{CURRENCIES.invert[@base_currency.to_i]}" if @base_currency.to_i != CAD
+      @total_cash = @portfolios.sum{ |p| p.cash * p.fx_rate } * @fx
+      @total_acb = @portfolios.sum{ |p| p.acb * p.fx_rate } * @fx
+      @total_curval = @portfolios.sum{ |p| p.curval * p.fx_rate } * @fx 
+      flash[:success] = "Fx: #{@fx}"
+    end
+    @total_gain = @total_curval - @total_acb
+    @total_gain_pc = @total_gain / @total_curval * 100 rescue 0
+    @total_base_value = @total_curval 
+
+#    flash[:success] = "Showing portfolios in #{@portfolios[0].currency_str}" if @currency.present?
   end
 
   def new

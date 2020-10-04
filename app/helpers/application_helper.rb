@@ -31,7 +31,7 @@ def num_to_phone( phone, area_code = true )
   number_to_phone(phone, area_code: :true) rescue ''
 end
 
-def to_currency (number, locale: :ca, precision: 0)
+def to_currency (number, locale: :en, precision: 0)
   number_to_currency(number, locale: locale, precision: precision)
 end
 

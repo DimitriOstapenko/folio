@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  acb: 1.5
+  cash: 1.5
+  curval: 1.5
+
+two:
+  acb: 1.5
+  cash: 1.5
+  curval: 1.5

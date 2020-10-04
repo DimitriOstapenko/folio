@@ -1,4 +1,8 @@
-<h2>Resend confirmation instructions</h2>
+<div class="row justify-content-md-center">
+  <div class="col-5">
+    <div class="card card-body bg-light">
+
+<h3>Resend confirmation instructions</h3>
 
 <%= simple_form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
   <%= f.error_notification %>
@@ -18,3 +22,7 @@
 <% end %>
 
 <%= render "devise/shared/links" %>
+
+    </div>
+  </div>
+</div>

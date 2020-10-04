@@ -25,8 +25,8 @@
   <tfoot>
     <th colspan=5></th>
     <th class="text-center"><%= to_currency @portfolio.acb %></th>
-    <th class="text-center"><%= to_currency @portfolio.curval %></th>
-    <th class="text-center"><%= to_currency @portfolio.gain %></th>
+    <th class="text-center"><%= to_currency @portfolio.curval - @portfolio.cash %></th>
+    <th class="text-center"><%= to_currency @portfolio.gain  %></th>
     <th class="text-center"><%= sprintf "%.2f", @portfolio.gain_pc %>%</th>
     <th colspan=2></th>
   </tfoot>

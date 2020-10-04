@@ -2,8 +2,11 @@ class Portfolio < ApplicationRecord
 
   belongs_to :user
   has_many :positions, :dependent => :destroy
+  has_many :portfolio_histories, :dependent => :destroy
   validates :name, presence: true, length: { maximum: 50 }
   validates :cash, :currency, presence: true, numericality: true
+
+  default_scope -> { order(name: :asc) }
 
   belongs_to :user
 
@@ -17,12 +20,32 @@ class Portfolio < ApplicationRecord
 # Get current CAD exchange rate 
   def fx_rate
     case self.currency_sym
-    when  :USD
+    when :USD
       USDCAD
     when :EUR
       EURCAD
+    when :XAU
+      XAUCAD
+    when :XAG
+      XAGCAD
     else
       1
+    end
+  end
+
+# What locale show currency in?  
+  def locale
+     case self.currency_sym
+    when :USD
+      :en
+    when :EUR
+      :fr
+    when :XAU
+      :au
+    when :XAG
+      :ag
+    else
+      :en
     end
   end
   
@@ -50,17 +73,17 @@ class Portfolio < ApplicationRecord
 
   def gain
     if self.positions.any?
-       self.curval - self.acb - self.cash
+      self.curval - self.acb - self.cash
     else 
-       self.curval - self.acb
-    end 
+      self.curval - self.acb
+    end
   end
 
   def gain_pc
     self.gain / self.acb * 100 rescue 0
   end
 
-  def total
+  def total_cad
     self.curval * self.fx_rate
   end
 

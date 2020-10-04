@@ -1,4 +1,6 @@
 <% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+
+<%= render "filters" %>
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
   <caption> Portfolios </caption>
   <thead>
@@ -11,7 +13,6 @@
           <th class="text-center">Market Value</th>
           <th class="text-center">Gain</th>
           <th class="text-center">Gain %</th>
-          <th class="text-center">Total (CAD)</th>
           <th class="text-center"></th>
           <th class="text-center"></th>
       </tr>
@@ -22,13 +23,14 @@
 
   </tbody>
    <tfoot>
-    <th colspan=3></th>
-    <th class="text-center"><%= to_currency @total_cash %></th>
-    <th class="text-center"><%= to_currency @total_acb %></th>
-    <th class="text-center"><%= to_currency @total_curval %></th>
-    <th class="text-center"><%= to_currency @total_gain %></th>
-    <th class="text-center"><%= sprintf "%.2f", @total_gain_pc %>%</th>
-    <th class="text-center"><%= to_currency @total_cad_value %></th>
+     <% currency = CURRENCIES.invert[@base_currency.to_i] %>
+     <% locale = currency == :EUR ? :fr : :en %>
+    <th colspan=3>Totals in <%= currency %></th>
+    <th class="text-center"><%= to_currency @total_cash, locale: locale  %></th>
+    <th class="text-center"><%= to_currency @total_acb, locale: locale %></th>
+    <th class="text-center"><%= to_currency @total_curval, locale: locale %></th>
+    <th class="text-center"><%= to_currency @total_gain, locale: locale %></th>
+    <th class="text-center"><%= sprintf "%.2f", @total_gain_pc, locale: locale %>%</th>
     <th colspan=2></th>
   </tfoot>
 </table>

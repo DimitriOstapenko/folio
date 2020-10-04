@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_01_161057) do
+ActiveRecord::Schema.define(version: 2020_10_04_093056) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "portfolio_histories", force: :cascade do |t|
+    t.float "acb"
+    t.float "cash"
+    t.float "curval"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "portfolio_id"
+    t.float "fx_rate", default: 1.0
+    t.index ["portfolio_id"], name: "index_portfolio_histories_on_portfolio_id"
+  end
 
   create_table "portfolios", force: :cascade do |t|
     t.string "name"
@@ -82,6 +93,7 @@ ActiveRecord::Schema.define(version: 2020_10_01_161057) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "portfolio_histories", "portfolios"
   add_foreign_key "portfolios", "users"
   add_foreign_key "positions", "portfolios"
 end
