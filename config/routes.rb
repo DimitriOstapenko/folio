@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  root 'quotes#index'
+  root 'portfolios#index'
 
   devise_for :users
 
@@ -9,4 +9,5 @@ Rails.application.routes.draw do
     resources :positions #, only: [:index, :show, :create, :destroy]
   end
 
+  get '/chart', to: 'static_pages#chart'
 end

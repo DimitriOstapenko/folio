@@ -3,10 +3,8 @@
     <li class="dropdown nav-item">
     <a href="#" class="dropdown-toggle_" data-toggle="dropdown"><i class="fa fa-bars fa-lg text-muted"></i></a>
       <ul class="dropdown-menu pl-1">
-        <li><%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id) %></li>
-        <li class="nav-item nav-link">One </li>
-        <li class="nav-item nav-link">two </li>
-        <li class="nav-item nav-link">three </li>
+        <li class="nav-item nav-link"><%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id) %></li>
+        <li class="nav-item nav-link"><%= link_to "<i class='fa fa-chart-area'></i> History Chart".html_safe, chart_path %></li>
         <li class="nav-item nav-link"><%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete %></li>
       </ul>
     </li>
