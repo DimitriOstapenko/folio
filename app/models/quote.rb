@@ -37,15 +37,19 @@ class Quote < ApplicationRecord
     self.ytd_change.round(2) rescue 0.00
   end
 
+  def expired?
+    self.latest_update < Date.today - 1.day rescue true
+  end
+
 # Class Methods:
 # returns db cached quote if present, last night's quote otherwise 
   def self.get( symbol, exch = '-CT' ) 
     symbol = symbol.strip.upcase rescue nil
     return unless symbol
-    cached = Quote.where("symbol=? AND exch=?", symbol, exch).first
-    return cached if cached.present?
-    quote = new(symbol: symbol, exch: exch)
-    quote.fetch
+    quote = Quote.where("symbol=? AND exch=?", symbol, exch).first
+    quote = new(symbol: symbol, exch: exch) unless quote.present?
+    quote.update if quote.expired?
+    return quote
   end
 
 # gold/silver currently excluded from commodities

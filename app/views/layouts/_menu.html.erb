@@ -1,11 +1,11 @@
 <% if current_user %>
   <ul class="nav navbar-nav navbar-left">
     <li class="dropdown nav-item">
-    <a href="#" class="dropdown-toggle_" data-toggle="dropdown"><i class="fa fa-bars fa-lg text-muted"></i></a>
+    <a href="#" class="dropdown-toggle2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars fa-lg text-muted"></i></a>
       <ul class="dropdown-menu pl-1">
-        <li class="nav-item nav-link"><%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id) %></li>
-        <li class="nav-item nav-link"><%= link_to "<i class='fa fa-chart-area'></i> History Chart".html_safe, chart_path %></li>
-        <li class="nav-item nav-link"><%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete %></li>
+        <li class="dropdown-item"><%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id) %></li>
+        <li class="dropdown-item"><%= link_to "<i class='fa fa-chart-area'></i> History Chart".html_safe, chart_path %></li>
+        <li class="dropdown-item"><%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete %></li>
       </ul>
     </li>
   </ul>

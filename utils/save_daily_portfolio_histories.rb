@@ -8,7 +8,9 @@
 require_relative '../config/environment'
 
 latest_date = PortfolioHistory.first.created_at.to_date
+puts "Latest date: #{latest_date}"
 abort "Portfolio stats already imported for this date - aborted"  if latest_date && latest_date == Date.today 
+
 Portfolio.all.each do |p|
   p.portfolio_histories.create(user_id: p.user_id, acb: p.acb, cash: p.cash, curval: p.curval, fx_rate: p.fx_rate)
 end

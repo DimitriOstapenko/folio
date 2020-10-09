@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_04_095406) do
+ActiveRecord::Schema.define(version: 2020_10_09_183847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,14 @@ ActiveRecord::Schema.define(version: 2020_10_04_095406) do
     t.float "pe_ratio"
   end
 
+  create_table "transactions", force: :cascade do |t|
+    t.float "qty"
+    t.bigint "position_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["position_id"], name: "index_transactions_on_position_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -99,4 +107,5 @@ ActiveRecord::Schema.define(version: 2020_10_04_095406) do
   add_foreign_key "portfolio_histories", "users"
   add_foreign_key "portfolios", "users"
   add_foreign_key "positions", "portfolios"
+  add_foreign_key "transactions", "positions"
 end

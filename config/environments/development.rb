@@ -4,6 +4,7 @@ Rails.application.configure do
   config.time_zone = "America/New_York"
 #  config.active_record.default_timezone = :local
   config.active_record.default_timezone = :utc
+#  config.active_record.default_timezone = "America/New_York"
   config.active_record.time_zone_aware_attributes = false
 
   # In the development environment your application's code is reloaded on
