@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require rails-ujs
+//= require chartkick
+//= require Chart.bundle
 //= require activestorage
 //= require turbolinks
 //= require_tree .
@@ -24,8 +26,6 @@
 //= require pagination-keys.js
 //= require tooltip.js
 //
-//= require chartkick
-//= require Chart.bundle
 
 // REMOVE 2 after alert-dismissible TO SLIDE UP !!
 $(document).on('turbolinks:load', function(){
