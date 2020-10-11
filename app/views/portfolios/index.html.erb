@@ -1,4 +1,6 @@
 <% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+<% currency = CURRENCIES.invert[@base_currency.to_i] %>
+<% locale = currency == :EUR ? :fr : :en %>
 
 <%= render "filters" %>
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
@@ -11,6 +13,7 @@
           <th class="text-center">Cash</th>
           <th class="text-center"><%= sortable 'acb', 'ACB' %></th>
           <th class="text-center">Market Value</th>
+          <th class="text-center">Market Value (<%= currency %>)</th>
           <th class="text-center">Gain</th>
           <th class="text-center">Gain %</th>
           <th class="text-center"></th>
@@ -23,11 +26,10 @@
 
   </tbody>
    <tfoot>
-     <% currency = CURRENCIES.invert[@base_currency.to_i] %>
-     <% locale = currency == :EUR ? :fr : :en %>
     <th colspan=3>Totals in <%= currency %></th>
     <th class="text-center"><%= to_currency @total_cash, locale: locale  %></th>
     <th class="text-center"><%= to_currency @total_acb, locale: locale %></th>
+    <th class="text-center"><%= to_currency @total_curval, locale: locale %></th>
     <th class="text-center"><%= to_currency @total_curval, locale: locale %></th>
     <th class="text-center"><%= to_currency @total_gain, locale: locale %></th>
     <th class="text-center"><%= sprintf "%.2f", @total_gain_pc, locale: locale %>%</th>

@@ -17,13 +17,14 @@ class PortfoliosController < ApplicationController
       @total_cash = @portfolios.sum{ |p| p.cash } * @fx
       @total_acb = @portfolios.sum{ |p| p.acb } * @fx
       @total_curval = @portfolios.sum{ |p| p.curval } * @fx 
+#      flash[:success] = "Fx: #{@fx}"
     else
       @fx = 1
       @fx = eval "CAD#{CURRENCIES.invert[@base_currency.to_i]}" if @base_currency.to_i != CAD
       @total_cash = @portfolios.sum{ |p| p.cash * p.fx_rate } * @fx
       @total_acb = @portfolios.sum{ |p| p.acb * p.fx_rate } * @fx
       @total_curval = @portfolios.sum{ |p| p.curval * p.fx_rate } * @fx 
-#      flash[:success] = "Fx: #{@fx}"
+#      flash[:success] = "bFx: #{@fx}"
     end
     @total_gain = @total_curval - @total_acb
     @total_gain_pc = @total_gain / @total_curval * 100 rescue 0

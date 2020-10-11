@@ -1,5 +1,7 @@
 class Quote < ApplicationRecord
 
+  validates :symbol, uniqueness: true
+
   default_scope -> { order(symbol: :asc, exchange: :asc) }
   after_initialize :set_defaults
 
@@ -19,10 +21,14 @@ class Quote < ApplicationRecord
 
 # Canadian symbols EOD only; US is real time  
   def expired?
-    return true if !self.latest_update             # new quote
+    return true unless self.latest_update.present? # new quote
     return true if self.exch == ''                 # US feed is real time  (&& self.latest_update < 15.minutes.ago  for cached)
-    return true if Time.now.on_weekend? && self.latest_update < 2.days.ago        
-    return true if self.latest_update < 1.day.ago  # Older than 1 day
+    if Time.now.on_weekend?
+      return true if self.latest_update < 2.days.ago        
+    else 
+      return true if self.latest_update < 1.day.ago  
+    end
+    return false
   end
 
   def update
@@ -35,10 +41,6 @@ class Quote < ApplicationRecord
 
   def ytd_change_str
     self.ytd_change.round(2) rescue 0.00
-  end
-
-  def expired?
-    self.latest_update < Date.today - 1.day rescue true
   end
 
 # Class Methods:
@@ -111,10 +113,10 @@ end
 
 def fetch_gold_silver
   self.latest_update = Time.now
-  if self.symbol = 'XAUUSD'
+  if self.symbol == 'XAUUSD'
     self.name = 'Gold'
     self.latest_price = XAUUSD
-  elsif self.symbol = 'XAGUSD'
+  elsif self.symbol == 'XAGUSD'
     self.name = 'Silver' 
     self.latest_price = XAGUSD
   end

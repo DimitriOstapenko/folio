@@ -80,7 +80,9 @@ class Portfolio < ApplicationRecord
   end
 
   def gain_pc
-    self.gain / self.acb * 100 rescue 0
+    gain = self.gain / self.acb * 100 rescue 0
+    gain = 0 if gain.nan?
+    return gain
   end
 
   def total_cad

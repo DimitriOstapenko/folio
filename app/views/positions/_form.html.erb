@@ -4,7 +4,7 @@
 
   <div class="row">
   <div class="col-3">
-  <%= f.input :symbol %>
+  <%= f.input :symbol, input_html: {onchange: 'SetQtyLabel();'} %>
   </div>
   <div class="col-3">
   <%= f.input :exch, collection: EXCHANGES, label: 'Exchange', include_blank: false %>
@@ -24,3 +24,18 @@
   </div>
 
 <% end %>
+
+
+<script>
+  $(document).ready(function() {
+     SetQtyLabel();
+  });
+
+  function SetQtyLabel(){
+    var symbol = document.getElementById("position_symbol").value;
+    if (symbol == 'XAUUSD' || symbol == 'XAGUSD') {
+      $('.position_qty label').append(' (Oz)');
+    }  
+  };
+</script>
+

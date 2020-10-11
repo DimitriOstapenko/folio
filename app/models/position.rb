@@ -1,11 +1,13 @@
 class Position < ApplicationRecord
 
   belongs_to :portfolio, inverse_of: :positions
+  has_many :transactions, :dependent => :destroy
 
   before_validation :set_attributes!
   before_save :set_currency!
 
   validates :symbol, :currency, presence: true
+  validates :symbol, uniqueness: {scope: :portfolio_id, message: "is already in portfolio" }
   validates :qty, presence: true, numericality: true
   validates :acb, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
@@ -15,17 +17,13 @@ class Position < ApplicationRecord
   end
 
   def set_currency!
-    if self.symbol == 'EUR'
-      self.currency = EUR 
-    elsif self.symbol == 'USD' || self.exch == US_EX
+    if self.symbol == 'EUR'  # Cash port in EU
+      self.currency = EUR    # Cash || equity in USD
+    elsif self.symbol == 'USD' || self.exch == US_EX || self.symbol =='XAUUSD' || self.symbol == 'XAGUSD'
       self.currency = USD 
     else
       self.currency = CAD
     end
-  end
-
-  def currency_str
-    CURRENCIES.invert[self.currency].to_s rescue nil
   end
 
   def exchange
@@ -36,8 +34,12 @@ class Position < ApplicationRecord
   def currency_sym
     CURRENCIES.invert[self.currency]
   end
+  
+  def currency_str
+    CURRENCIES.invert[self.currency].to_s rescue nil
+  end
 
- # Get current exchange rate relative to portfolio currency (CAD stock portfolios only for now)
+# Get current exchange rate relative to portfolio currency (CAD stock portfolios only for now)
   def fx_rate
     if self.portfolio.currency_sym == :CAD && self.currency_sym == :USD
       return USDCAD 
