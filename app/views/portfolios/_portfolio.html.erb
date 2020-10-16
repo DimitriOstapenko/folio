@@ -6,7 +6,7 @@
 <td class="text-center"><%= to_currency portfolio.cash, locale: portfolio.locale  %></td>
 <td class="text-center"><%= to_currency portfolio.acb, locale: portfolio.locale %></td>
 <td class="text-center"><%= to_currency portfolio.curval, locale: portfolio.locale %></td>
-<td class="text-center"><%= to_currency portfolio.curval*@fx, locale: base_column_locale %></td>
+<td class="text-center"><%= to_currency portfolio.curval * portfolio.fx_rate * @fx, locale: base_column_locale %></td>
 <td class="text-center"><%= to_currency portfolio.gain, locale: portfolio.locale %></td>
 <td class="text-center"><%= sprintf "%.2f", portfolio.gain_pc %></td>
 <td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_path(portfolio) %> </td>

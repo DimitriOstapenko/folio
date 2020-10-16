@@ -3,7 +3,6 @@ class QuotesController < ApplicationController
   before_action :logged_in_user
 
   def index 
-    @quote = Quote.new
     @quotes = Quote.paginate(page: params[:page])
   end
 
@@ -13,11 +12,14 @@ class QuotesController < ApplicationController
 
   def create
     symbol = params[:quote][:symbol].strip.upcase rescue nil
-    exch = params[:quote][:exch] rescue '-CT'
-#    flash[:info] = 'Got quote'
+    exch = params[:quote][:exch] || '-CT'
+    exch = 'comm' if symbol.match?('XA(U|G)USD')
+#    flash[:info] = "About to get quote from db for:  #{symbol.inspect} exch:  #{exch.inspect}"
     @quote = Quote.find_by(symbol: symbol, exch: exch)
     if @quote
-      @quote.fetch && @quote.save if @quote.expired?
+#    flash[:info] = "Got quote from db:  #{@quote.inspect} #{symbol} #{exch}"
+      flash[:info] = "Got expired - updating.. (updated #{@quote.updated_at})" if @quote.expired?
+     @quote.update if @quote.expired?
       redirect_to @quote
     else
       @quote = Quote.new(symbol: symbol, exch: exch)
@@ -27,6 +29,7 @@ class QuotesController < ApplicationController
         redirect_to quotes_path
       else
         @quote.save
+#        flash[:info] = "Fetched & saved new quote: #{@quote.inspect}"
         redirect_to @quote
       end
     end
@@ -36,7 +39,7 @@ class QuotesController < ApplicationController
   end
 
   def update
-    @quote.fetch && @quote.save
+    @quote.update
     if @quote.errors.any?
       flash[:info] = @quote.errors.full_messages.to_sentence
     else
@@ -46,7 +49,8 @@ class QuotesController < ApplicationController
   end
 
   def show
-    @quote.fetch && @quote.save if @quote.expired?
+    @quote.update if @quote.expired?
+#    flash[:info] = @quote.inspect
   end
 
   def destroy
@@ -61,8 +65,9 @@ private
 #  end  
 #
    def set_quote
-    @quote = Quote.find(params[:id])
-    redirect_to quotes_path unless @quote && @quote.latest_price
+     @quote = Quote.find(params[:id]) rescue nil
+    
+    redirect_to quotes_path, alert: 'Quote does not exist'  unless @quote #&& @quote.latest_price
    end
 
 end

@@ -19,8 +19,8 @@
 //= require_tree .
 //
 //= require popper
+// = require bootstrap
 //= require bootstrap-sprockets
-//= require bootstrap
 //= require select2
 //
 //= require pagination-keys.js
@@ -29,7 +29,7 @@
 
 // REMOVE 2 after alert-dismissible TO SLIDE UP !!
 $(document).on('turbolinks:load', function(){
-    $(".alert-dismissible").delay(2000).slideUp(500, function(){
+    $(".alert-dismissible2").delay(2000).slideUp(500, function(){
           $(".alert").alert('close');
       });
     });

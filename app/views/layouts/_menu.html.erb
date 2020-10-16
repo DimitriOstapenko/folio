@@ -1,13 +1,34 @@
 <% if current_user %>
   <ul class="nav navbar-nav navbar-left">
-    <li class="dropdown nav-item">
-    <a href="#" class="dropdown-toggle2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bars fa-lg text-muted"></i></a>
-      <ul class="dropdown-menu pl-1">
-        <li class="dropdown-item"><%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id) %></li>
-        <li class="dropdown-item"><%= link_to "<i class='fa fa-chart-area'></i> History Chart".html_safe, chart_path %></li>
-        <li class="dropdown-item"><%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete %></li>
-      </ul>
-    </li>
+<button class="navbar-toggler" type="button" data-toggle="dropdown" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarDropdown">
+    <ul class="nav navbar-nav navbar-left">
+      <li class="nav-item dropdown">
+        <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fa fa-bars fa-lg text-muted"></i>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id), class: "dropdown-item" %>
+          <%= link_to "<i class='fa fa-chart-area'></i> History Chart".html_safe, chart_path, class: "dropdown-item" %>
+          <%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+        </div>
+      </li>
+    </ul>
+  </div>
   </ul>
 <% end %>
 
+<!--
+<% if current_user %>
+  <button class="dropdown-toggler"  type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+     <%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id), class: "dropdown-item" %>
+     <%= link_to "<i class='fa fa-chart-area'></i> History Chart".html_safe, chart_path, class: "dropdown-item" %>
+     <%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+  </div>
+<% end %>
+-->

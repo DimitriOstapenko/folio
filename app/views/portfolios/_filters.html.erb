@@ -1,19 +1,11 @@
-<%= simple_form_for :portfolio, method: :get, html: { class: 'form-inline' } do |f| %>
-<div class="container no-gutters">
-<div class="form-group row nno-gutters">
-  <div class="col-2">
-    Show portfolios in:  
+<%= simple_form_for :portfolio, method: :get do |f| %>
+<div class="row">
+  <div class="col-lg-2">
+    <%= f.input :currency, collection: CURRENCIES, label: false, hint: "Show portfolios in", include_blank: 'All Currencies', selected: @currency, input_html: { onchange: 'this.form.submit();' }  %>
   </div>
-  <div class="col-2">
-    <%= f.input :currency, collection: CURRENCIES, label: false, include_blank: 'All Currencies', selected: @currency, input_html: { onchange: 'this.form.submit();' }  %>
-  </div>
-  <div class="col-2">
-     Show totals in:  
-  </div>
-  <div class="col-2">
-    <%= f.input :base_currency, collection: CURRENCIES.slice(:CAD,:EUR,:USD), label: false, include_blank: false, selected: @base_currency, input_html: { onchange: 'this.form.submit();' }  %>
+  <div class="col-lg-2">
+    <%= f.input :base_currency, collection: CURRENCIES, label: false, hint: "Show totals in",  include_blank: false, selected: @base_currency, input_html: { onchange: 'this.form.submit();' }  %>
   </div>  
-</div>
 </div>
 <% end %>
 <div class='pb-3'></div>

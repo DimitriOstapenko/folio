@@ -3,7 +3,6 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 
-
 $theme-colors: ( "bootstrap": #563d7c, "simpleform": #00617f );
 @import "simple_form-bootstrap/simple_form-bootstrap";
 
@@ -80,6 +79,15 @@ table {
 
 .navbar-brand {
   font-size: 25px;
+}
+
+#dropdownMenuButton {
+  outline: 0;
+}
+
+.dropdown-menu {
+  background-color: cyan;
+  opacity: 1;
 }
 
 section {
