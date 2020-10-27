@@ -1,4 +1,6 @@
-<h1>Positions#show</h1>
+<h2> <%= @portfolio.name %> : <%= @position.symbol %> </h2>
 
+<div class="mt-3"></div>
 
-I am position <%= @position.id %> (<%= @position.symbol %>) 
+<%= render "transactions/index" %>
+

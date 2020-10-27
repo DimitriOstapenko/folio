@@ -19,8 +19,8 @@
 //= require_tree .
 //
 //= require popper
-// = require bootstrap
-//= require bootstrap-sprockets
+//= require bootstrap
+//  require bootstrap-sprockets
 //= require select2
 //
 //= require pagination-keys.js

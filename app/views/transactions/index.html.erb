@@ -1,0 +1,41 @@
+<% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+
+<h3> <%= @portfolio.name %> : <%= @position.symbol %> </h3>
+<div class="mt-3"></div>
+<table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
+  <caption><%= @position.symbol %>: transactions </caption>
+  <thead>
+      <tr>
+          <th class="text-center">Date</th>
+          <th class="text-center">Type</th>
+          <th class="text-center">Quantity</th>
+          <th class="text-center">Price</th>
+          <th class="text-center">Amount</th>
+          <th class="text-center">Comm.</th>
+          <th class="text-center">Cap Gain</th>
+          <th class="text-center">Share Balance</th>
+          <th class="text-center">ACB</th>
+          <th class="text-center">ACB/Share</th>
+          <th></th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+
+  <%= render @transactions %>
+
+  </tbody>
+  <tfoot>
+    <th colspan=2></th>
+    <th class="text-center"><%= @position.qty %></th>
+    <th colspan=3></th>
+    <th class="text-center"><%= to_currency @position.cap_gain, precision: 0 %></th>
+    <th colspan=5></th>
+  </tfoot>
+</table>
+
+<div class="row mt-3">
+  <div class="col-2">
+    <%= button_to "Add Transaction", new_portfolio_position_transaction_path(@portfolio,@position), class: "btn btn-primary", method: :get %>
+  </div>
+</div>

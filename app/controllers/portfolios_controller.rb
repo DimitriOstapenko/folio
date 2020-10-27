@@ -1,7 +1,7 @@
 class PortfoliosController < ApplicationController
 
   before_action :logged_in_user
-  before_action :init, only: [:show, :edit, :update, :destroy ]
+  before_action :init, only: [:show, :edit, :update, :destroy, :add_cash ]
   
   helper_method :sort_column, :sort_direction
 
@@ -62,6 +62,10 @@ class PortfoliosController < ApplicationController
       render 'edit'
     end
   end
+
+#  def add_cash
+#    @portfolio.position.create(symbol: 'CASH', exch: '', currency: @portfolio.currency, qty: params[:qty])
+#  end
 
   def destroy
     flash[:success] = "Portfolio #{@portfolio.name} deleted. "

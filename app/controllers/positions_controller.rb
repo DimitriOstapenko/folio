@@ -19,6 +19,7 @@ class PositionsController < ApplicationController
     @position = @portfolio.positions.build(position_params)
     if @position.save
        flash[:success] = "New position created"
+       @position.transactions.create(qty: @position.qty, ttl_qty: @position.qty, acb: @position.acb,  price: @position.acb/@position.qty, tr_type: BUY_TR)  unless @position.transactions.any?
        redirect_to portfolio_positions_path(@portfolio)
     else
        render 'new'
@@ -35,6 +36,7 @@ class PositionsController < ApplicationController
   end
 
   def show
+    @transactions = @position.transactions
   end
 
   def update
@@ -55,7 +57,7 @@ class PositionsController < ApplicationController
   end
 
   def position_params
-    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency )
+    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency, :avg_price )
   end
 
   def sort_column

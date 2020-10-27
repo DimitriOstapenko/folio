@@ -1,10 +1,11 @@
 class Position < ApplicationRecord
 
   belongs_to :portfolio, inverse_of: :positions
-  has_many :transactions, :dependent => :destroy
+  has_many :transactions, dependent: :destroy, autosave: true
+  default_scope -> { order(symbol: :asc) }
 
   before_validation :set_attributes!
-  before_save :set_currency!
+  before_save :set_currency_and_avg_price!
 
   validates :symbol, :currency, presence: true
   validates :symbol, uniqueness: {scope: :portfolio_id, message: "is already in portfolio" }
@@ -12,11 +13,13 @@ class Position < ApplicationRecord
   validates :acb, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   def set_attributes!
-    self.symbol.strip!.gsub!(/\s+/,' ').upcase! rescue ''
+    self.symbol.strip!.gsub!(/\s+/,' ') rescue ''
+    self.symbol.upcase!
     self.currency = self.portfolio.currency
+    self.qty ||= 0
   end
 
-  def set_currency!
+  def set_currency_and_avg_price!
     if self.symbol == 'EUR'  # Cash port in EU
       self.currency = EUR    # Cash || equity in USD
     elsif self.symbol == 'USD' || self.exch == US_EX || self.symbol =='XAUUSD' || self.symbol == 'XAGUSD'
@@ -24,6 +27,7 @@ class Position < ApplicationRecord
     else
       self.currency = CAD
     end
+    self.avg_price = self.acb / self.qty rescue 0
   end
 
   def exchange
@@ -50,10 +54,6 @@ class Position < ApplicationRecord
     end
   end
 
-  def avg_price
-    self.acb / self.qty 
-  end
-
 # Current market value in position currency 
   def curval
     quote = Quote.get(self.symbol, self.exch) 
@@ -70,12 +70,27 @@ class Position < ApplicationRecord
     self.acb * self.fx_rate
   end
 
+# Current gain  
   def gain
     self.curval - self.acb
   end
 
   def gain_pc
+    return 0 if self.acb.abs < 0.01
     sprintf("%.2f", self.gain / self.acb * 100) rescue 0
+  end
+
+# Locked in Cap Gain
+  def cap_gain
+    self.transactions.sum{ |tr| tr.gain * self.fx_rate } 
+  end  
+
+# Recalculate position after change of one of the transactions
+  def recalculate
+    self.qty = self.acb = 0
+    self.transactions.reverse.each do |tr|
+      tr.recalculate
+    end
   end
 
 end

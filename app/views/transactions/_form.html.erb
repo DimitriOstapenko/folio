@@ -1,0 +1,26 @@
+<%= simple_form_for [@portfolio,@position,@transaction] do |f| %>
+  <%# render 'shared/error_messages', object: f.object %>
+  <%= render 'shared/generic_error', object: f.object %>
+
+  <div class="row">
+  <div class="col-3">
+  <%= f.input :qty, as: :integer, label: "Quantity"  %>
+  </div>
+  <div class="col-3">
+    <%= f.input :price  %>
+  </div>
+  <div class="col-3">
+    <%= f.input :tr_type, collection: TRANSACTION_TYPES, include_blank: false  %>
+  </div>
+  <div class="col-3">
+    <%= f.input :fees  %>
+  </div>
+  </div>
+
+  <div class="row">
+  <div class="col-md-12">
+  <%= f.submit yield(:button_text), class: "btn btn-primary btn-block" %>
+  </div>
+  </div>
+
+<% end %>
