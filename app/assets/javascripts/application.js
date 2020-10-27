@@ -18,10 +18,10 @@
 //= require turbolinks
 //= require_tree .
 //
-//= require popper
 //= require bootstrap
 //  require bootstrap-sprockets
 //= require select2
+//= require popper
 //
 //= require pagination-keys.js
 //= require tooltip.js
