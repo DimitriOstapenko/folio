@@ -12,8 +12,6 @@
 //
 //= require jquery
 //= require rails-ujs
-//= require chartkick
-//= require Chart.bundle
 //= require activestorage
 //= require turbolinks
 //= require_tree .
@@ -22,6 +20,8 @@
 //  require bootstrap-sprockets
 //= require select2
 //= require popper
+//= require chartkick
+//= require Chart.bundle
 //
 //= require pagination-keys.js
 //= require tooltip.js

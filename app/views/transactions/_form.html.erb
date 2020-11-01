@@ -4,15 +4,18 @@
 
   <div class="row">
   <div class="col-3">
+    <%= f.input :tr_type, label: 'Transaction',  collection: TRANSACTION_TYPES, include_blank: false  %>
+  </div>
+  <div class="col-3" id="cashdiv" style=<%= 'display:none;' unless @transaction.drip? %> >
+  <%= f.input :cashdiv, label: "Cash Dividend"  %>
+  </div>
+  <div class="col-3">
   <%= f.input :qty, as: :integer, label: "Quantity"  %>
   </div>
   <div class="col-3">
     <%= f.input :price  %>
   </div>
-  <div class="col-3">
-    <%= f.input :tr_type, collection: TRANSACTION_TYPES, include_blank: false  %>
-  </div>
-  <div class="col-3">
+  <div class="col-3" id="fees" style=<%= 'display:none;' if @transaction.drip?  %> >
     <%= f.input :fees  %>
   </div>
   </div>
@@ -24,3 +27,20 @@
   </div>
 
 <% end %>
+
+<script>
+$(document).ready(function () {
+   var tr_type = $('select[name="transaction[tr_type]"]');
+   var fees = document.getElementById('fees');
+   var drip = <%= DRIP_TR %>;
+   (tr_type.val() == drip) ? $('#cashdiv').show() : $('#cashdiv').hide();
+   (tr_type.val() == drip ) ? $('#fees').hide() : $('#fees').show();
+   tr_type.change(function () {
+     (tr_type.val() == drip ) ? $('#cashdiv').show() : $('#cashdiv').hide();
+     (tr_type.val() == drip ) ? $('#fees').hide() : $('#fees').show();
+   });
+  });
+</script>
+
+
+

@@ -1,18 +1,17 @@
 <%= simple_form_for [@portfolio,@position] do |f| %>
-  <%# render 'shared/error_messages', object: f.object %>
   <%= render 'shared/generic_error', object: f.object %>
 
   <div class="row">
-  <div class="col-3">
+  <div class="col-md-3">
   <%= f.input :symbol, input_html: {onchange: 'SetQtyLabel();'} %>
   </div>
-  <div class="col-3">
+  <div class="col-md-3">
   <%= f.input :exch, collection: EXCHANGES, label: 'Exchange', include_blank: false %>
   </div>
-  <div class="col-3">
+  <div class="col-md-3">
   <%= f.input :qty, as: :integer, label: "Quantity"  %>
   </div>
-  <div class="col-3">
+  <div class="col-md-3">
     <%= f.input :acb, label: "Cost Base (#{@portfolio.currency_str})"  %>
   </div>
   </div>
