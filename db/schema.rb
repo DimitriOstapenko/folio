@@ -10,10 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_31_194957) do
+ActiveRecord::Schema.define(version: 2020_11_01_112121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "charts", force: :cascade do |t|
+    t.float "change"
+    t.float "change_over_time"
+    t.float "change_percent"
+    t.string "change_percent_s"
+    t.float "close"
+    t.date "date"
+    t.float "high"
+    t.string "label"
+    t.float "low"
+    t.float "open"
+    t.float "u_close"
+    t.float "u_high"
+    t.float "u_low"
+    t.float "u_open"
+    t.integer "u_volume"
+    t.integer "volume"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "quote_id"
+    t.index ["quote_id"], name: "index_charts_on_quote_id"
+  end
 
   create_table "portfolio_histories", force: :cascade do |t|
     t.float "acb"
@@ -111,6 +134,7 @@ ActiveRecord::Schema.define(version: 2020_10_31_194957) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "charts", "quotes"
   add_foreign_key "portfolio_histories", "portfolios"
   add_foreign_key "portfolio_histories", "users"
   add_foreign_key "portfolios", "users"

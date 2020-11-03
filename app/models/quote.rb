@@ -2,6 +2,7 @@ class Quote < ApplicationRecord
 
 #  validates :symbol, uniqueness: true
   validates :symbol, uniqueness: {scope: :exch, message: "is already in quotes table" }
+#  has_one :chart, dependent: :destroy, autosave: true
 
   default_scope -> { order(symbol: :asc, exchange: :asc) }
   after_initialize :set_defaults
@@ -76,6 +77,7 @@ def fetch
   return fetch_fx if self.exch == 'fx' 
   q = IEX_CLIENT.quote(self.symbol + self.exch) rescue nil
   if q
+#      self.chart = IEX_CLIENT.chart(self.symbol + self.exch, 'ytd')
       self.exchange = q.primary_exchange || ''
       self.name = q.company_name || ''
       self.latest_price = q.latest_price || 0.0
