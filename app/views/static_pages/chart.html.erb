@@ -5,7 +5,6 @@
 <%# area_chart CURRENCIES  %>
 <%# column_chart CURRENCIES %>
 
-
 <%= area_chart PortfolioHistory.where(user_id: user.id).reorder('').group('date(created_at)').sum("curval*fx_rate"), 
 #  points: false,
   prefix: "$",

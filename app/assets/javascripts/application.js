@@ -13,18 +13,18 @@
 //= require jquery
 //= require rails-ujs
 //= require activestorage
+//= require Chart.bundle
+//= require chartkick
 //= require turbolinks
 //= require_tree .
 //
-//= require bootstrap
+//=  require bootstrap
 //  require bootstrap-sprockets
 //= require select2
-//= require popper
-//= require chartkick
-//= require Chart.bundle
 //
 //= require pagination-keys.js
-//= require tooltip.js
+// require tooltip.js
+//= require popper
 //
 
 // REMOVE 2 after alert-dismissible TO SLIDE UP !!
