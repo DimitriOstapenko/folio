@@ -1,16 +1,19 @@
-
 <% user = current_user %>
 
 <%# line_chart CURRENCIES, xtitle: "Currency", ytitle: "Value"  %>
 <%# area_chart CURRENCIES  %>
 <%# column_chart CURRENCIES %>
 
-<%= area_chart PortfolioHistory.where(user_id: user.id).reorder('').group('date(created_at)').sum("curval*fx_rate"), 
+<%# area_chart PortfolioHistory.where(user_id: user.id).reorder('').group('date(created_at)').sum("curval*fx_rate"),  %>
+<%= column_chart PortfolioHistory.where(user_id: user.id).reorder('').group('date(created_at)').sum("curval*fx_rate"), 
 #  points: false,
   prefix: "$",
   thousands: ",",
   messages: {empty: "No data"},
-#  width: "1000px", height: "500px",
+  min: 3000000,
+  max: 5000000,
+#  width: "1000px",
+  height: "800px",
   xtitle: "Time", 
   ytitle: "Current Value (CAD)",
   title: "#{user.email} : Value of all portfolios over time ",

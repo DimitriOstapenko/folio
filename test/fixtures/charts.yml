@@ -1,37 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  change: 1.5
-  change_over_time: 1.5
-  change_percent: 1.5
-  change_percent_s: MyString
-  close: 1.5
-  date: 2020-11-01
-  high: 1.5
-  label: MyString
-  low: 1.5
-  open: 1.5
-  u_close: 1.5
-  u_high: 1.5
-  u_low: 1.5
-  u_open: 1.5
-  u_volume: 1
+  symbol: MyString
+  exch: MyString
+  date: 2020-11-05
+  price: 1.5
   volume: 1
 
 two:
-  change: 1.5
-  change_over_time: 1.5
-  change_percent: 1.5
-  change_percent_s: MyString
-  close: 1.5
-  date: 2020-11-01
-  high: 1.5
-  label: MyString
-  low: 1.5
-  open: 1.5
-  u_close: 1.5
-  u_high: 1.5
-  u_low: 1.5
-  u_open: 1.5
-  u_volume: 1
+  symbol: MyString
+  exch: MyString
+  date: 2020-11-05
+  price: 1.5
   volume: 1

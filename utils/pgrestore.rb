@@ -4,7 +4,7 @@
 # 
 # N.B! dropdb will fail if db is accessed by other client(s) - stop apache before running! (root cron)
 #
-#This script is different on debian and OSX. Version below is for debian
+#This script is different on debian and OSX. Version below is for OSX
 # OSX: /usr/local/bin/createdb 
 # deb: /usr/bin/createdb
 

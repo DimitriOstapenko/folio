@@ -2,7 +2,6 @@ class Quote < ApplicationRecord
 
 #  validates :symbol, uniqueness: true
   validates :symbol, uniqueness: {scope: :exch, message: "is already in quotes table" }
-#  has_one :chart, dependent: :destroy, autosave: true
 
   default_scope -> { order(symbol: :asc, exchange: :asc) }
   after_initialize :set_defaults
@@ -24,7 +23,7 @@ class Quote < ApplicationRecord
 
 # Canadian symbols EOD only; US is real time  
   def expired?
-    return false if self.exch == '-CT'
+#    return false if self.exch == '-CT' &&  self.latest_update < 1.day.ago
     return true unless self.latest_update.present? # new quote
     return true if self.exch == '' && Date.current.on_weekday?   # US feed is real time  (&& self.latest_update < 15.minutes.ago  for cached)
     if Date.today.sunday? || Date.current.monday?
@@ -38,6 +37,22 @@ class Quote < ApplicationRecord
   def update
     self.fetch && self.save
   end
+
+# If oldest point is this year, go back 1 year and get chart data up to today. Otherwise, just save most recent data point
+  def update_chart
+    oldest_point_date = Chart.where(symbol: self.symbol).where(exch: self.exch).last.date rescue Date.today
+
+    if oldest_point_date > Date.today.beginning_of_year
+      hist_chart = IEX_CLIENT.chart(self.symbol + self.exch, '1y') rescue []
+      hist_chart.each do |ch|
+        point = Chart.new(symbol:self.symbol, exch:self.exch, date:ch.date, price: ch.close, volume:ch.volume)
+        point.save if point.valid? 
+      end
+    else
+      latest = IEX_CLIENT.chart(self.symbol + self.exch, '5d').last
+      Chart.create(symbol:self.symbol, exch:self.exch, date:latest.date, price: latest.close, volume: latest.volume)
+    end
+  end  
 
 #  def exists?
 #    self.class.exists?(self.id)
@@ -77,7 +92,6 @@ def fetch
   return fetch_fx if self.exch == 'fx' 
   q = IEX_CLIENT.quote(self.symbol + self.exch) rescue nil
   if q
-#      self.chart = IEX_CLIENT.chart(self.symbol + self.exch, 'ytd')
       self.exchange = q.primary_exchange || ''
       self.name = q.company_name || ''
       self.latest_price = q.latest_price || 0.0
