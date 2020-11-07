@@ -1,14 +1,11 @@
-<div class="d-inline-flex h-25">
+<div class="d-flex flex-row align-items-end">
 <% if @quote.present? %>
-   <div class="card card-body bg-light">
+     <div class="p-2 pl-5">
      <h3><%= @quote.name %> (<%= @quote.symbol %>)  <%= link_to '<i class="fas fa-sync-alt"></i>'.html_safe, @quote, method: :patch  %> </h3>
      <small> <%= @quote.exchange %> </small>
-     <div class="pt-3">
        <% color = @quote.change > 0 ? 'green' : 'red' %>
        <h2 class="mb-0"><%= @quote.latest_price %> <small><font color="<%= color %>"><%= sprintf('%+.2f', @quote.change) %> (<%= @quote.change_percent_s %>)</font></small></h2>
        <small> as of <%= @quote.latest_update %></small>
-       <div class="row">
-         <div class="col-md-5">
          <table class="tbl2 table-hover_ table-striped table-condensed" >
            <tbody>
              <tr><td> Prev Close: </td><td><%= sprintf('%.2f', @quote.prev_close)  %> </td> </tr>
@@ -22,27 +19,23 @@
              <tr><td> P/e ratio : </td><td><%= sprintf('%.2f', @quote.pe_ratio) %></td></tr>
          </tbody>
          </table>
-         </div>
-         <div class="col-md-7">
+     </div>
 
+     <div class="p-2 pt-5 pl-5 mr-auto">
 <%= area_chart Chart.where(symbol: @quote.symbol).pluck(:date,:price),
   points: false,
   prefix: "$",
   thousands: ",",
   messages: {empty: "No data"},
-  width: "375px",
-  height: "285px",
-#  title: "#{@quote.symbol} : Year chart ",
+  width: "450px",
+  height: "250px",
+#  title: "ytd chart ",
   download: {filename: @quote.symbol}
 %>
-         </div>
-
      </div>
-   </div>
-   </div>
-
 <% else %>
   Please enter symbol
 <% end %>
-  </div>
+</div>
+
 

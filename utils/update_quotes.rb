@@ -7,10 +7,11 @@ require_relative '../config/environment'
 puts "updating quotes.."
 
 Quote.all.each do |quote|
-  next unless quote.expired?
-  puts "updating quote for #{quote.symbol}"
-  quote.update
+  puts "#{quote.symbol}: updating chart.."
   quote.update_chart
+  next unless quote.expired?
+  puts "updating quote"
+  quote.update
 end
 
 

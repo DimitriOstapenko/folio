@@ -49,8 +49,10 @@ class Quote < ApplicationRecord
         point.save if point.valid? 
       end
     else
+#     most recent data point      
       latest = IEX_CLIENT.chart(self.symbol + self.exch, '5d').last
       Chart.create(symbol:self.symbol, exch:self.exch, date:latest.date, price: latest.close, volume: latest.volume)
+      self.update_attribute(:volume, latest.volume)
     end
   end  
 
@@ -96,7 +98,7 @@ def fetch
       self.name = q.company_name || ''
       self.latest_price = q.latest_price || 0.0
       self.latest_update = q.latest_update_t || nil
-      self.volume = q.latest_volume || 0
+      self.volume = q.latest_volume if q.latest_volume > 0
       self.prev_close = q.previous_close || 0.0
       self.week52high = q.week_52_high || 0.0
       self.week52low = q.week_52_low || 0.0
