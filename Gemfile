@@ -68,4 +68,6 @@ end
 gem 'simple_form', '~> 5.0.0'
 gem 'whenever', require: false
 gem "chartkick"
+gem 'rss'
+
 #gem 'groupdate'

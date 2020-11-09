@@ -142,4 +142,20 @@ def fetch_commodity
   self
 end
 
+# Read yahoo rss news
+def news
+  require 'rss'
+  require 'open-uri'
+  exch = ''; news = []
+  exch = '.TO' if self.exch == '-CT'
+  uri = 'http://finance.yahoo.com/rss/headline?s='+ self.symbol + exch
+  puts uri
+  rss = open(uri)
+  feed = RSS::Parser.parse(rss)
+  feed.items.each do |item|
+    news.push({ title: item.title, date: item.pubDate, link: item.link, description: item.description })
+  end
+  return news
+end
+
 end

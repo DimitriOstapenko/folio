@@ -38,4 +38,10 @@
 <% end %>
 </div>
 
-
+<div class="p-5">
+<table class="table table-sm table-striped table-responsive" >
+  <tbody>
+    <%= render partial: "news", collection: @quote.news, cached: true %>
+  </tbody>
+</table>
+</div>
