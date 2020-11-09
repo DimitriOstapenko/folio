@@ -1,0 +1,30 @@
+<% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+
+<table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
+  <caption>Active positions </caption>
+  <thead>
+          <th class="text-center">Portfolio</th>
+          <th class="text-center">Symbol</th>
+          <th class="text-center">Exchange</th>
+          <th class="text-center">Quantity</th>
+          <th class="text-center">Avg. Price</th>
+          <th class="text-center">Currency </th>
+          <th class="text-center">ACB </th>
+          <th class="text-center">Cur. Value </th>
+          <th class="text-center">Gain</th>
+          <th class="text-center">Gain %</th>
+          <th></th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+
+<%= render @positions %>
+
+ </tbody>
+  <tfoot>
+    <th colspan=8></th>
+  </tfoot>
+</table>
+
+

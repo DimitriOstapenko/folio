@@ -1,6 +1,6 @@
 <% scroll = "table-wrapper-scroll-x" if mobile_device? %>
 
-<h3> <%= @portfolio.name %> : <%= @position.symbol %> </h3>
+<h3><%= link_to "#{@portfolio.name} : #{@position.symbol}", portfolio_positions_path(@portfolio) %></h3>
 <div class="mt-3"></div>
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
   <caption><%= @position.symbol %>: transactions </caption>
@@ -35,7 +35,7 @@
 </table>
 
 <div class="row mt-3">
-  <div class="col-2">
+  <div class="col-md-2">
     <%= button_to "Add Transaction", new_portfolio_position_transaction_path(@portfolio,@position), class: "btn btn-primary", method: :get %>
   </div>
 </div>

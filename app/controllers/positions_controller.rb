@@ -9,6 +9,10 @@ class PositionsController < ApplicationController
     @positions = @portfolio.positions
   end
 
+  def all_positions
+    @positions = Position.all
+  end
+
   def new
     @portfolio = Portfolio.find(params[:portfolio_id])
     @position = @portfolio.positions.new
