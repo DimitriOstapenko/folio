@@ -19,15 +19,11 @@ class Portfolio < ApplicationRecord
 
 # Get current CAD exchange rate 
   def fx_rate
-    case self.currency_sym
-    when :USD
+    case self.currency
+    when USD
       USDCAD
-    when :EUR
+    when EUR
       EURCAD
-    when :XAU
-      XAUCAD
-    when :XAG
-      XAGCAD
     else
       1
     end
@@ -35,15 +31,11 @@ class Portfolio < ApplicationRecord
 
 # What locale show currency in?  
   def locale
-     case self.currency_sym
-    when :USD
+    case self.currency
+    when USD
       :en
-    when :EUR
+    when EUR
       :fr
-    when :XAU
-      :au
-    when :XAG
-      :ag
     else
       :en
     end

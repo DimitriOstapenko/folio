@@ -5,7 +5,7 @@ class Position < ApplicationRecord
   default_scope -> { order(symbol: :asc) }
 
   before_validation :set_attributes!
-  before_save :set_currency_and_avg_price!
+#  before_save :set_currency_and_avg_price!
 
   validates :symbol, :currency, presence: true
   validates :symbol, uniqueness: {scope: :portfolio_id, message: "is already in portfolio" }
@@ -13,18 +13,16 @@ class Position < ApplicationRecord
   validates :acb, presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   def set_attributes!
+    if self.is_cash?
+      self.acb = self.qty
+      self.symbol = self.currency_str
+    end
     self.symbol.strip!.gsub!(/\s+/,' ') rescue ''
     self.symbol.upcase!
-    self.currency = self.portfolio.currency
     self.qty ||= 0
-  end
-
-  def set_currency_and_avg_price!
-    if self.symbol == 'EUR'  # Cash port in EU
-      self.currency = EUR    # Cash || equity in USD
-    elsif self.symbol == 'USD' || self.exch == US_EX || self.symbol =='XAUUSD' || self.symbol == 'XAGUSD'
+    if self.exch == US_EX || self.symbol =='XAUUSD' || self.symbol == 'XAGUSD'
       self.currency = USD 
-    else
+    elsif self.exch == CA_EX
       self.currency = CAD
     end
     self.avg_price = self.acb / self.qty rescue 0
@@ -32,6 +30,11 @@ class Position < ApplicationRecord
 
   def exchange
     EXCHANGES.invert[self.exch].to_s rescue nil
+  end
+
+# Is it cash position?
+  def is_cash?
+    CURRENCIES.keys.include?(self.symbol.to_sym)  
   end
 
 # Return currency symbol (:CAD, :EUR, :USD) 
@@ -43,13 +46,21 @@ class Position < ApplicationRecord
     CURRENCIES.invert[self.currency].to_s rescue nil
   end
 
-# Get current exchange rate relative to portfolio currency (CAD stock portfolios only for now)
+# Get current exchange rate relative to portfolio currency
   def fx_rate
-    if self.portfolio.currency_sym == :CAD && self.currency_sym == :USD
+    if self.portfolio.currency == CAD && self.currency == USD
       return USDCAD 
-    elsif self.portfolio.currency_sym == :CAD && self.currency_sym == :EUR
+    elsif self.portfolio.currency == CAD && self.currency == EUR
       return EURCAD 
-    else 
+    elsif self.portfolio.currency == EUR && self.currency == CAD
+      return 1/EURCAD
+    elsif self.portfolio.currency == EUR && self.currency == USD
+      return 1/EURUSD
+    elsif self.portfolio.currency == USD && self.currency == CAD
+      return 1/USDCAD
+    elsif self.portfolio.currency == USD && self.currency == EUR
+      return EURUSD
+    else
       return 1
     end
   end
@@ -57,6 +68,7 @@ class Position < ApplicationRecord
 # Current market value in position currency 
   def curval
     quote = Quote.get(self.symbol, self.exch) 
+    quote.latest_price = 1 if self.is_cash?  
     self.qty * quote.latest_price rescue 0
   end
 

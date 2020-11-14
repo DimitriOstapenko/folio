@@ -51,7 +51,7 @@ private
   end
 
   def transaction_params
-    params.require(:transaction).permit( :qty, :price, :tr_type, :fees, :acb, :gain, :ttl_qty, :cashdiv )
+    params.require(:transaction).permit( :qty, :price, :tr_type, :fees, :acb, :gain, :ttl_qty, :cashdiv, :note )
   end
 
   def sort_column

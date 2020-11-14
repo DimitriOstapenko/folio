@@ -63,9 +63,15 @@ class PortfoliosController < ApplicationController
     end
   end
 
-#  def add_cash
+# Add cash transaction   
+  def add_cash
+    @position = @portfolio.positions.find_by(symbol: 'CASH') || @portfolio.positions.new(symbol: 'CASH')
+    @transaction = @position.transactions.new(tr_type: CASH_TR, price: 1.0, fees: 0.0 )
+
+#     cash = params[:qty]
+#     @portfolio.update_attribute(cash: @portfolio.cash + cash)
 #    @portfolio.position.create(symbol: 'CASH', exch: '', currency: @portfolio.currency, qty: params[:qty])
-#  end
+  end
 
   def destroy
     flash[:success] = "Portfolio #{@portfolio.name} deleted. "
@@ -81,7 +87,7 @@ class PortfoliosController < ApplicationController
   end
 
   def portfolio_params
-    params.require(:portfolio).permit( :name, :currency, :cash )
+    params.require(:portfolio).permit( :name, :currency, :cash, :cashonly )
   end
 
   def sort_column

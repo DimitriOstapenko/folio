@@ -3,8 +3,11 @@
   <%= render 'shared/generic_error', object: f.object %>
 
   <div class="row">
-  <div class="col-6">
+  <div class="col-3">
   <%= f.input :name, hint: "Portfolio name" %>
+  </div>
+  <div class="col-3">
+    <%= f.input :cashonly, label: 'Cash Only?', collection: [['Yes', 'true'], ['No', 'false']], include_blank: false %>
   </div>
   <div class="col-md-3">
   <%= f.input :currency, collection: CURRENCIES, include_blank: false %>

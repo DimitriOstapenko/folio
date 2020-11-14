@@ -1,6 +1,7 @@
 <% base_column_locale = @base_currency.to_i == EUR ? :fr : :en %>
+<% cl = 'table-success' if portfolio.cashonly? %>
 <tr>
-<td class="text-center"><%= link_to portfolio.name, portfolio_positions_path(portfolio) %></td>
+<td class="text-center <%= cl %>"><%= link_to portfolio.name, portfolio_positions_path(portfolio) %></td>
 <td class="text-center"><%= portfolio.positions.count %></td>
 <td class="text-center"><%= portfolio.currency_str %></td>
 <td class="text-center"><%= to_currency portfolio.cash, locale: portfolio.locale  %></td>

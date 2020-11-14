@@ -2,10 +2,14 @@
 
 <div class="row justify-content-md-center">
 <div class="col-md-8">
-<h3>New Position</h3>
+  <h3><%= @portfolio.name %> <%= @portfolio.cashonly? ? '(Cash Portfolio)':'' %>): New Position</h3>
 <div class="card p-3">
 
-  <%= render 'form' %>
+  <% if @portfolio.cashonly? || params[:addcash] %>
+    <%= render 'cash_form' %>
+  <% else %>
+    <%= render 'form' %>
+  <% end %>
 
 </div>
 </div>

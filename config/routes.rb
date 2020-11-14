@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 
   resources :quotes #, :users
   resources :portfolios do
+    get 'add_cash', on: :member
     resources :positions do  #, only: [:index, :show, :create, :destroy]
        resources :transactions
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_06_023624) do
+ActiveRecord::Schema.define(version: 2020_11_13_000107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2020_11_06_023624) do
     t.bigint "user_id"
     t.float "cash"
     t.integer "currency"
+    t.boolean "cashonly", default: false
     t.index ["user_id"], name: "index_portfolios_on_user_id"
   end
 
@@ -59,6 +60,7 @@ ActiveRecord::Schema.define(version: 2020_11_06_023624) do
     t.datetime "updated_at", null: false
     t.bigint "portfolio_id"
     t.float "avg_price"
+    t.string "note"
     t.index ["portfolio_id"], name: "index_positions_on_portfolio_id"
   end
 
@@ -98,6 +100,7 @@ ActiveRecord::Schema.define(version: 2020_11_06_023624) do
     t.float "gain", default: 0.0
     t.float "ttl_qty", default: 0.0
     t.float "cashdiv"
+    t.string "note"
     t.index ["position_id"], name: "index_transactions_on_position_id"
   end
 

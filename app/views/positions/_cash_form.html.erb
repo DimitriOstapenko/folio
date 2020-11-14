@@ -1,0 +1,34 @@
+<%= simple_form_for [@portfolio,@position] do |f| %>
+  <%= render 'shared/generic_error', object: f.object %>
+
+  <%= f.hidden_field :symbol %>
+  <%= f.hidden_field :addcash, value: 1 %>
+
+  <div class="row">
+  <div class="col-md-4">
+  <%= f.input :currency, collection: CURRENCIES, include_blank: false %>
+  </div>
+  <div class="col-md-4">
+  <%= f.input :qty, hint: "Deposit/Withdrawal Amount" %>
+  </div>
+  <div class="col-md-4">
+  <%= f.input :note %>
+  </div>
+  </div>
+
+  <div class="row">
+  <div class="col-md-12">
+  <%= f.submit 'Save Cash Position', class: "btn btn-primary btn-block", onclick: "set_symbol();" %>
+  </div>
+  </div>
+
+<% end %>
+
+<script>
+function set_symbol() {
+  var cur = document.getElementById("position_currency");
+  var curval = cur.options[cur.selectedIndex].text;
+//  console.log(curval);
+  document.getElementById("position_symbol").value = curval;
+}
+</script>
