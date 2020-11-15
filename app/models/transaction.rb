@@ -27,11 +27,15 @@ class Transaction < ApplicationRecord
     when CASH_TR
       self.price = 1.0
       self.fees = 0.0
-      self.position.portfolio.cash += self.qty 
-      self.position.portfolio.save
+#      self.position.portfolio.cash += self.qty 
+#      self.position.portfolio.save
     else 
       errors.add(:'Transaction Type', "is invalid")
     end
+  end
+
+  def locale
+    self.position.currency == EUR ? :fr : :ca 
   end
 
   def tr_type_str
@@ -64,6 +68,7 @@ class Transaction < ApplicationRecord
 
 # Recalculate position and save it along with transaction  
   def recalculate
+    return unless self.qty
     self.position.qty += self.qty if self.qty.present?
     case self.tr_type
     when BUY_TR 

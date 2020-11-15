@@ -1,16 +1,15 @@
 <% cl = 'table-warning' if transaction.sell? %>
-<% locale = @position.currency_sym == :EUR ? :fr : :ca %>
 <tr class="<%= cl %>">
-<td class="text-center"><%= transaction.created_at.to_date %></td>
+<td class="text-center"><%= transaction.date %></td>
 <td class="text-center"><%= transaction.tr_type_str %></td>
 <td class="text-center"><%= transaction.qty %></td>
-<td class="text-center"><%= to_currency transaction.price, precision: 2, locale: locale %></td>
-<td class="text-center"><%= to_currency transaction.amount, precision: 0, locale: locale %></td>
-<td class="text-center"><%= to_currency transaction.fees, precision: 2, locale: locale %></td>
-<td class="text-center"><%= to_currency transaction.gain, precision: 2, locale: locale %></td>
+<td class="text-center"><%= to_currency transaction.price, precision: 2, locale: transaction.locale %></td>
+<td class="text-center"><%= to_currency transaction.amount, precision: 0, locale: transaction.locale %></td>
+<td class="text-center"><%= to_currency transaction.fees, precision: 2, locale: transaction.locale %></td>
+<td class="text-center"><%= to_currency transaction.gain, precision: 2, locale: transaction.locale %></td>
 <td class="text-center"><%= transaction.ttl_qty %></td>
-<td class="text-center"><%= to_currency transaction.acb, precision: 0, locale: locale %></td>
-<td class="text-center"><%= to_currency transaction.acb_share, precision: 4, locale: locale %></td>
+<td class="text-center"><%= to_currency transaction.acb, precision: 0, locale: transaction.locale %></td>
+<td class="text-center"><%= to_currency transaction.acb_share, precision: 4, locale: transaction.locale %></td>
   <%# if transaction_counter == 0 %>
   <% if true %>
 <td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_position_transaction_path(@portfolio,@position,transaction) %> </td>

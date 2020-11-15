@@ -3,20 +3,23 @@
   <%= render 'shared/generic_error', object: f.object %>
 
   <div class="row">
-  <div class="col-3">
+    <div class="col-md-2">
     <%= f.input :tr_type, label: 'Transaction',  collection: TRANSACTION_TYPES, include_blank: false  %>
   </div>
-  <div class="col-3" id="cashdiv" style=<%= 'display:none;' unless @transaction.drip? %> >
+  <div class="col-md-2" id="cashdiv" style=<%= 'display:none;' unless @transaction.drip? %> >
   <%= f.input :cashdiv, label: "Cash Dividend"  %>
   </div>
-  <div class="col-3">
+  <div class="col-2">
   <%= f.input :qty, as: :integer, label: "Quantity"  %>
   </div>
-  <div class="col-3">
+  <div class="col-2">
     <%= f.input :price  %>
   </div>
-  <div class="col-3" id="fees" style=<%= 'display:none;' if @transaction.drip?  %> >
+  <div class="col-2" id="fees" style=<%= 'display:none;' if @transaction.drip?  %> >
     <%= f.input :fees  %>
+  </div>
+  <div class="col-md-3">
+  <%= f.input :date, value: Date.today %>
   </div>
   </div>
 

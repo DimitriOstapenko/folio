@@ -23,7 +23,7 @@ class Quote < ApplicationRecord
 
 # Canadian symbols EOD only; US is real time  
   def expired?
-#    return false if self.exch == '-CT' &&  self.latest_update < 1.day.ago
+    return false if self.is_cash?
     return true unless self.latest_update.present? # new quote
     return true if self.exch == '' && Date.current.on_weekday?   # US feed is real time  (&& self.latest_update < 15.minutes.ago  for cached)
     if Date.today.sunday? || Date.current.monday?
@@ -64,17 +64,17 @@ class Quote < ApplicationRecord
     self.ytd_change.round(2) rescue 0.00
   end
 
-# Class Methods:
+# Class Method:
 # returns db cached quote if present, last night's quote otherwise 
   def self.get( symbol, exch = '-CT' ) 
-    symbol = symbol.strip.upcase rescue nil
     return unless symbol
+    symbol = symbol.strip.upcase rescue nil
     quote = Quote.find_by(symbol: symbol, exch: exch)
-    if quote.present?
+    if quote.present? 
       quote.update if quote.expired?  # US live quotes only! Cdn are updated in utils/update_quotes.rb 
     else
       quote = Quote.new(symbol: symbol, exch: exch)
-      quote.update
+      quote.update unless quote.is_cash?
     end
     return quote
   end
@@ -156,6 +156,10 @@ def news
     news.push({ title: item.title, date: item.pubDate, link: item.link, description: item.description })
   end
   return news
+end
+
+def is_cash?
+  CURRENCIES.keys.include?(self.symbol.to_sym)
 end
 
 end
