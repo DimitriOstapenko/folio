@@ -87,7 +87,7 @@ class PortfoliosController < ApplicationController
   end
 
   def portfolio_params
-    params.require(:portfolio).permit( :name, :currency, :cash, :cashonly )
+    params.require(:portfolio).permit( :name, :currency, :cashonly )
   end
 
   def sort_column

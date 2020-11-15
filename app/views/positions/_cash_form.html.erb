@@ -6,10 +6,10 @@
 
   <div class="row">
   <div class="col-md-4">
-  <%= f.input :currency, collection: CURRENCIES, include_blank: false %>
+  <%= f.input :currency, collection: CURRENCIES, include_blank: false, selected: @portfolio.currency %>
   </div>
   <div class="col-md-4">
-  <%= f.input :qty, hint: "Deposit/Withdrawal Amount" %>
+  <%= f.input :qty, label:'Amount', hint: "Deposit/Withdrawal Amount" %>
   </div>
   <div class="col-md-4">
   <%= f.input :note %>

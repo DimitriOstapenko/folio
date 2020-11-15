@@ -14,7 +14,6 @@ class Portfolio < ApplicationRecord
 
   def set_attributes!
     self.currency ||= :CDN
-    self.cash ||= 0.0
   end
 
 # Get current CAD exchange rate 
@@ -49,32 +48,27 @@ class Portfolio < ApplicationRecord
     CURRENCIES.invert[self.currency]
   end
 
+# Calculate cash in base currency
+  def cash
+    self.positions.sum{|pos| pos.is_cash? ? pos.curval_base : 0}
+  end
+
 # Adjusted cost base of all positions in portfolio currency
   def acb
-    if self.positions.any?
-      self.positions.sum{|pos| pos.acb_base}
-    else
-      self.cash
-    end
+    self.positions.sum{|pos| pos.acb_base}
   end
 
 # Total market value of all equity positions in portfolio currency
   def curval
-    self.positions.sum{|pos| pos.curval_base} + self.cash
+    self.positions.sum{|pos| pos.curval_base}  # + self.cash
   end
 
   def gain
-    if self.positions.any?
-      self.curval - self.acb - self.cash
-    else 
       self.curval - self.acb
-    end
   end
 
   def gain_pc
-    gain = self.gain / self.acb * 100 rescue 0
-    gain = 0 if gain.nan?
-    return gain
+    self.gain / self.acb * 100 rescue 0
   end
 
   def total_cad

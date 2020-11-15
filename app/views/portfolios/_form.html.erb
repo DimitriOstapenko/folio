@@ -3,17 +3,14 @@
   <%= render 'shared/generic_error', object: f.object %>
 
   <div class="row">
-  <div class="col-3">
+  <div class="col-md-4">
   <%= f.input :name, hint: "Portfolio name" %>
   </div>
-  <div class="col-3">
+  <div class="col-md-4">
     <%= f.input :cashonly, label: 'Cash Only?', collection: [['Yes', 'true'], ['No', 'false']], include_blank: false %>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-4">
   <%= f.input :currency, collection: CURRENCIES, include_blank: false %>
-  </div>
-  <div class="col-md-3">
-  <%= f.input :cash %>
   </div>
   </div>
 

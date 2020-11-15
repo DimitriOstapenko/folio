@@ -10,12 +10,13 @@ class Position < ApplicationRecord
   validates :symbol, :currency, presence: true
   validates :symbol, uniqueness: {scope: :portfolio_id, message: "is already in portfolio" }
   validates :qty, presence: true, numericality: true
-  validates :acb, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :acb, presence: true, numericality: true #{ greater_than_or_equal_to: 0 }
 
   def set_attributes!
     if self.is_cash?
       self.acb = self.qty
       self.symbol = self.currency_str
+      self.exch = nil
     end
     self.symbol.strip!.gsub!(/\s+/,' ') rescue ''
     self.symbol.upcase!
