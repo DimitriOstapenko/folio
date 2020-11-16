@@ -7,6 +7,7 @@ class Transaction < ApplicationRecord
 
   before_create :set_attributes!
   before_validation :set_tr_type!
+  validate :validate_tr
 
   def set_tr_type!
     self.tr_type = CASH_TR if self.position.is_cash?
@@ -22,13 +23,15 @@ class Transaction < ApplicationRecord
       self.qty = -self.qty.abs
     when DRIP_TR  # Cash dividend
       self.qty = self.qty.abs
-      self.position.portfolio.cash += self.cashdiv - (self.qty * self.price)
-      self.position.portfolio.save
+      cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
+      if cash > 0
+        pos = self.position.portfolio.positions.find_by(symbol: self.position.currency_str)
+        tr = pos.transactions.create(tr_type: CASH_TR, qty: cash, date: self.date, note: 'Cash from DRIP')
+        tr.position.recalculate
+      end
     when CASH_TR
       self.price = 1.0
       self.fees = 0.0
-#      self.position.portfolio.cash += self.qty 
-#      self.position.portfolio.save
     else 
       errors.add(:'Transaction Type', "is invalid")
     end
@@ -51,7 +54,7 @@ class Transaction < ApplicationRecord
   end
 
   def acb_share
-    self.acb / self.ttl_qty
+    self.acb / self.ttl_qty rescue 0
   end
 
   def sell?
@@ -85,6 +88,16 @@ class Transaction < ApplicationRecord
     self.acb = self.position.acb
     self.ttl_qty = self.position.qty
     self.position.save!
+  end
+
+  def validate_tr
+    case self.tr_type
+    when CASH_TR
+      errors.add(:cashdiv, ': Insufficient amount of shares') if self.qty > self.position.qty
+    when DRIP_TR
+      cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
+      errors.add(:cashdiv, ': Insufficient amount') if cash < 0
+    end
   end
 
 end

@@ -2,15 +2,16 @@
 
 <div class="row justify-content-md-center">
 <div class="col-md-8">
-  <h3><%= @portfolio.name %>: <%= @position.symbol %> - New Transaction</h3>
-<div class="card p-3">
+  <h3><%= @portfolio.name %>: <%= @position.symbol %> - New <%= @position.is_cash? ? 'Cash':'' %> Transaction</h3>
+<div class="card p-3 bg-light">
+  <div class="card-body">
 
-  <% if @portfolio.cashonly? %>
+  <% if @position.is_cash? %>
     <%= render 'cash_form' %>
   <% else %>
     <%= render 'form' %>
   <% end %>
-
+  </div>
 </div>
 </div>
 </div>

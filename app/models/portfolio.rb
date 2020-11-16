@@ -60,7 +60,7 @@ class Portfolio < ApplicationRecord
 
 # Total market value of all equity positions in portfolio currency
   def curval
-    self.positions.sum{|pos| pos.curval_base}  # + self.cash
+    self.positions.sum{|pos| pos.curval_base} 
   end
 
   def gain
@@ -73,6 +73,13 @@ class Portfolio < ApplicationRecord
 
   def total_cad
     self.curval * self.fx_rate
+  end
+
+# check if position in one or more of the supported currencies is not in portfolio yet  
+  def has_available_cash_position?
+    avail = CURRENCIES.keys
+    taken = self.positions.collect{|p| p.symbol.to_sym}
+    (avail & taken).count != avail.count
   end
 
 end

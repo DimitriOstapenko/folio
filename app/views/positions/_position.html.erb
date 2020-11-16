@@ -9,7 +9,7 @@
 <td class="text-center"><%= to_currency position.avg_price, precision: 4, locale: locale %></td>
 <td class="text-center"><%= position.currency_str %></td>
 <td class="text-center"><%= to_currency position.acb %></td>
-<td class="text-center"><%= to_currency position.curval %></td>
+<td class="text-center"><%= to_currency position.curval_base %></td>
 <td class="text-center"><%= to_currency position.gain %></td>
 <td class="text-center"><%= position.gain_pc %>%</td>
 <td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_position_path(position.portfolio,position) %> </td>

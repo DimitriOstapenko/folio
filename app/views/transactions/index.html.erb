@@ -6,25 +6,23 @@
   <caption><%= @position.symbol %>: transactions </caption>
   <thead>
       <tr>
-          <th class="text-center">Date</th>
-          <th class="text-center">Type</th>
-          <th class="text-center">Quantity</th>
-          <th class="text-center">Price</th>
-          <th class="text-center">Amount</th>
-          <th class="text-center">Comm.</th>
-          <th class="text-center">Cap Gain</th>
-          <th class="text-center">Share Balance</th>
-          <th class="text-center">ACB</th>
-          <th class="text-center">ACB/Share</th>
-          <th></th>
-          <th></th>
+        <% if @position.is_cash? %>
+          <%= render "cash_index" %>
+        <% else %>
+          <%= render "index" %>
+        <% end %>
       </tr>
   </thead>
   <tbody>
 
-  <%= render @transactions %>
+  <% if @position.is_cash? %>
+  <%= render partial: "cash_transaction",  collection: @transactions %>
+  <% else %>
+  <%= render  @transactions %>
+  <% end %>
 
   </tbody>
+  <% unless @position.is_cash? %>
   <tfoot>
     <th colspan=2></th>
     <th class="text-center"><%= @position.qty %></th>
@@ -32,10 +30,8 @@
     <th class="text-center"><%= to_currency @position.cap_gain, precision: 0 %></th>
     <th colspan=5></th>
   </tfoot>
+  <% end %>
 </table>
 
-<div class="row mt-3">
-  <div class="col-md-2">
-    <%= button_to "Add Transaction", new_portfolio_position_transaction_path(@portfolio,@position), class: "btn btn-primary", method: :get %>
-  </div>
-</div>
+<% button_text = @position.is_cash? ? "Add Cash Transaction":"Add Transaction" %>
+<%= button_to button_text, new_portfolio_position_transaction_path(@portfolio,@position), class: "btn btn-primary col-md-2", method: :get %>
