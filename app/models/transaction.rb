@@ -92,8 +92,8 @@ class Transaction < ApplicationRecord
 
   def validate_tr
     case self.tr_type
-    when CASH_TR
-      errors.add(:cashdiv, ': Insufficient amount of shares') if self.qty > self.position.qty
+    when SELL_TR
+      errors.add(:qty, ': Insufficient number of shares') if self.qty.abs > self.position.qty
     when DRIP_TR
       cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
       errors.add(:cashdiv, ': Insufficient amount') if cash < 0

@@ -1,4 +1,5 @@
 <%= simple_form_for [@portfolio,@position,@transaction] do |f| %>
+  <%# render 'shared/error_messages', object: f.object %>
   <%= render 'shared/generic_error', object: f.object %>
 
   <%= f.hidden_field :tr_type, value: CASH_TR %>
