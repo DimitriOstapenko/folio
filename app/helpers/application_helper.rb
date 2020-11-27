@@ -35,10 +35,4 @@ def to_currency (number, locale: :en, precision: 0)
   number_to_currency(number, locale: locale, precision: precision)
 end
 
-def get_symbol_qty(symbol)
-  qty = Position.where(symbol: symbol).sum(:qty).to_int
-  qty = nil if qty.zero?
-  return qty
-end
-
 end

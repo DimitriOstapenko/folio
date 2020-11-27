@@ -1,8 +1,8 @@
-<% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+<% scroll = "table-responsive" if mobile_device? %>
 
+<h5><%= link_to @portfolio.name, portfolio_path(@portfolio) %> (<%= @portfolio.currency_str %>) : Positions </h5>
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
-  <caption><%= @portfolio.name %> portfolio (<%= @portfolio.currency_str  %>): positions </caption>
-  <thead>
+  <thead class="table-info"> 
       <tr>
           <th class="text-center">Symbol</th>
           <th class="text-center">Exchange</th>
@@ -35,13 +35,13 @@
 <div class="row">
   <% unless @portfolio.cashonly? %>
   <div class="col-md-2">
-    <%= button_to "Add Position", new_portfolio_position_path(@portfolio), class: "btn btn-primary", method: :get %>
+    <%= button_to "Add Position", new_portfolio_position_path(@portfolio), class: "btn btn-info", method: :get %>
   </div>
   <% end %>
 
   <% if @portfolio.has_available_cash_position? %>
   <div class="col-md-2">
-    <%= button_to "Add Cash", new_portfolio_position_path(@portfolio), class: "btn btn-success", method: :get, params: {addcash: 1} %>
+    <%= button_to "Add Cash Position", new_portfolio_position_path(@portfolio), class: "btn btn-success", method: :get, params: {addcash: 1} %>
   </div>
   <% end %>
 </div>

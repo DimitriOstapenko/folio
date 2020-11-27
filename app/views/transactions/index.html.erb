@@ -1,10 +1,10 @@
-<% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+<% scroll = "table-responsive" if mobile_device? %>
 
-<h3><%= link_to "#{@portfolio.name} : #{@position.symbol}", portfolio_positions_path(@portfolio) %></h3>
+<h5><%= link_to @portfolio.name, portfolio_positions_path(@portfolio) %>: <%= @position.symbol %></h5>
 <div class="mt-3"></div>
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
   <caption><%= @position.symbol %>: transactions </caption>
-  <thead>
+  <thead class="table-info">
       <tr>
         <% if @position.is_cash? %>
           <%= render "cash_index" %>
@@ -34,4 +34,4 @@
 </table>
 
 <% button_text = @position.is_cash? ? "Add Cash Transaction":"Add Transaction" %>
-<%= button_to button_text, new_portfolio_position_transaction_path(@portfolio,@position), class: "btn btn-primary col-md-2", method: :get %>
+<%= button_to button_text, new_portfolio_position_transaction_path(@portfolio,@position), class: "btn btn-info col-md-2", method: :get %>

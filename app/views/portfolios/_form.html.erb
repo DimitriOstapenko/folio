@@ -3,20 +3,23 @@
   <%= render 'shared/generic_error', object: f.object %>
 
   <div class="row">
-  <div class="col-md-4">
-  <%= f.input :name, hint: "Portfolio name" %>
+  <div class="col-md-3">
+  <%= f.input :name, hint: "Descriptive portfolio name" %>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
     <%= f.input :cashonly, label: 'Cash Only?', collection: [['Yes', 'true'], ['No', 'false']], include_blank: false %>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
   <%= f.input :currency, collection: CURRENCIES, include_blank: false %>
+  </div>
+  <div class="col-md-3">
+  <%= f.input :taxable, label: 'Taxable?', collection: [['Yes', 'true'], ['No', 'false']], include_blank: false %>
   </div>
   </div>
 
   <div class="row">
   <div class="col-md-12">
-  <%= f.submit yield(:button_text), class: "btn btn-primary btn-block" %>
+  <%= f.submit yield(:button_text), class: "btn btn-info" %>
   </div>
   </div>
 

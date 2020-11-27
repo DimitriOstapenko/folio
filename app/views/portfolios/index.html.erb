@@ -5,7 +5,7 @@
 <%= render "filters" %>
 <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
   <caption> Portfolios </caption>
-  <thead>
+  <thead class="table-info">
       <tr>
           <th class="text-center"><%= sortable 'name', 'Name' %></th>
           <th class="text-center">Positions</th>
@@ -37,4 +37,4 @@
   </tfoot>
 </table>
 
-<%= button_to "Add Portfolio", new_portfolio_path, class: "btn btn-primary col-md-2", method: :get %>
+<%= button_to "Add Portfolio", new_portfolio_path, class: "btn btn-info col-md-2", method: :get %>

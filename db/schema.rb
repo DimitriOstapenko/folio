@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_15_173957) do
+ActiveRecord::Schema.define(version: 2020_11_20_011837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2020_11_15_173957) do
     t.bigint "user_id"
     t.integer "currency"
     t.boolean "cashonly", default: false
+    t.boolean "taxable", default: false
     t.index ["user_id"], name: "index_portfolios_on_user_id"
   end
 
@@ -100,7 +101,7 @@ ActiveRecord::Schema.define(version: 2020_11_15_173957) do
     t.float "ttl_qty", default: 0.0
     t.float "cashdiv"
     t.string "note"
-    t.date "date"
+    t.datetime "date"
     t.index ["position_id"], name: "index_transactions_on_position_id"
   end
 

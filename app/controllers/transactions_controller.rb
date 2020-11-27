@@ -39,7 +39,7 @@ class TransactionsController < ApplicationController
   def update
     if @transaction.update_attributes(transaction_params)
       @position.recalculate
-      flash[:success] = "Transaction updated. Position recalculated"
+      flash[:success] = "Transaction updated"
     end
     redirect_to portfolio_position_transactions_path(@portfolio,@position)
   end

@@ -52,6 +52,7 @@ class PortfoliosController < ApplicationController
   end
 
   def show
+    @positions = @portfolio.positions
   end
 
   def update
@@ -87,7 +88,7 @@ class PortfoliosController < ApplicationController
   end
 
   def portfolio_params
-    params.require(:portfolio).permit( :name, :currency, :cashonly )
+    params.require(:portfolio).permit( :name, :currency, :cashonly, :taxable )
   end
 
   def sort_column

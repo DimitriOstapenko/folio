@@ -5,7 +5,7 @@
 <% end %>
 <td class="text-center"><%= link_to position.symbol, portfolio_position_transactions_path(position.portfolio,position) %></td>
 <td class="text-center"><%= position.exchange %></td>
-<td class="text-center"><%= position.qty %></td>
+<td class="text-center"><%= position.qty.to_i %></td>
 <td class="text-center"><%= to_currency position.avg_price, precision: 4, locale: locale %></td>
 <td class="text-center"><%= position.currency_str %></td>
 <td class="text-center"><%= to_currency position.acb %></td>

@@ -1,6 +1,6 @@
 <tr>
 <td class="text-center"><%= cash_transaction.position.currency_str %></td>
-<td class="text-center"><%= cash_transaction.date %></td>
+<td class="text-center"><%= cash_transaction.date.to_date rescue '-' %></td>
 <td class="text-center"><%= cash_transaction.qty %></td>
 <td class="text-center"><%= cash_transaction.ttl_qty %></td>
 <td class="text-center"><%= cash_transaction.note %></td>

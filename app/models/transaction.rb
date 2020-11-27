@@ -5,13 +5,14 @@ class Transaction < ApplicationRecord
   validates :qty, presence: true, numericality: true, if: Proc.new { |tr| (tr.tr_type != DRIP_TR)}
   validates :tr_type, presence: true
 
-  before_create :set_attributes!
-  before_validation :set_tr_type!
+  before_validation :set_attributes!
+#  before_validation :set_tr_type!
+  after_save :add_cash_div, if: Proc.new { |tr| (tr.tr_type == DRIP_TR)}
   validate :validate_tr
 
-  def set_tr_type!
-    self.tr_type = CASH_TR if self.position.is_cash?
-  end
+#  def set_tr_type!
+#    self.tr_type = CASH_TR if self.position.is_cash?
+#  end
 
   def set_attributes!
     self.qty ||= 0.0     # cash div
@@ -23,18 +24,27 @@ class Transaction < ApplicationRecord
       self.qty = -self.qty.abs
     when DRIP_TR  # Cash dividend
       self.qty = self.qty.abs
-      cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
-      if cash > 0
-        pos = self.position.portfolio.positions.find_by(symbol: self.position.currency_str)
-        tr = pos.transactions.create(tr_type: CASH_TR, qty: cash, date: self.date, note: 'Cash from DRIP')
-        tr.position.recalculate
-      end
     when CASH_TR
       self.price = 1.0
       self.fees = 0.0
     else 
       errors.add(:'Transaction Type', "is invalid")
     end
+  end
+
+# add remaining cash from dividend reinvestment  
+  def add_cash_div
+    cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
+    if cash > 0
+      cash_position = self.base_cash_position
+      tr = cash_position.transactions.create(tr_type: CASH_TR, qty: cash, date: self.date, note: 'Cash from DRIP') if cash_position
+      tr.position.recalculate
+    end
+  end 
+
+# Find cash position in current position's base currency, if any  
+  def base_cash_position
+    self.position.portfolio.positions.find_by(symbol: self.position.currency_str) rescue nil
   end
 
   def locale
@@ -76,6 +86,11 @@ class Transaction < ApplicationRecord
     case self.tr_type
     when BUY_TR 
       self.position.acb += self.amount + self.fees
+      # Adjust cash
+      cash_pos = self.base_cash_position
+      qty = acb = -(self.amount + self.fees)
+      cash_pos.transactions.create(tr_type: CASH_TR, qty: qty, acb: acb, price: 1, ttl_qty: cash_pos.qty+qty, date: self.date, note: "bought #{self.qty} #{self.position.symbol} @ #{self.price} + #{self.fees} in fees" )
+      cash_pos.update_attribute(:qty, cash_pos.qty + qty)
     when DRIP_TR
       self.position.acb += self.amount if self.qty.present?
     when SELL_TR
@@ -93,7 +108,7 @@ class Transaction < ApplicationRecord
   def validate_tr
     case self.tr_type
     when SELL_TR
-      errors.add(:qty, ': Insufficient number of shares') if self.qty.abs > self.position.qty
+      errors.add(:qty, ': Insufficient number of shares') if self.position.qty < 0
     when DRIP_TR
       cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
       errors.add(:cashdiv, ': Insufficient amount') if cash < 0

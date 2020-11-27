@@ -1,7 +1,7 @@
 <div class="d-flex flex-row align-items-end">
 <% if @quote.present? %>
      <div class="p-2 pl-5">
-     <h3><%= @quote.name %> (<%= @quote.symbol %>)  <%= link_to '<i class="fas fa-sync-alt"></i>'.html_safe, @quote, method: :patch  %> </h3>
+     <h5><%= @quote.name %> (<%= @quote.symbol %>)  <%= link_to '<i class="fas fa-sync-alt"></i>'.html_safe, @quote, method: :patch  %> </h5>
      <small> <%= @quote.exchange %> </small>
        <% color = @quote.change > 0 ? 'green' : 'red' %>
        <h2 class="mb-0"><%= @quote.latest_price %> <small><font color="<%= color %>"><%= sprintf('%+.2f', @quote.change) %> (<%= @quote.change_percent_s %>)</font></small></h2>

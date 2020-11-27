@@ -1,0 +1,18 @@
+<% scroll = "table-wrapper-scroll-x" if mobile_device? %>
+
+<% @portfolios.each do |portfolio| %>
+    <h5 class="pt-5">Portfolio: <%= portfolio.name %> </h5>
+    <% portfolio.positions.each do |position| %>
+    <% next if position.is_cash? %>
+    <h5 class="pt-5"> <%= position.symbol %> </h5>
+    <table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
+      <thead>
+        <%= render "index_header" %>
+      </thead>
+      <tbody>
+        <%= render partial: 'transaction', collection: position.transactions %>
+      </tbody>
+      <%= render "index_footer", position: position %>
+    </table>
+    <% end %>
+<% end %>

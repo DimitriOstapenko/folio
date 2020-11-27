@@ -1,25 +1,26 @@
 <%= simple_form_for [@portfolio,@position,@transaction] do |f| %>
-  <%# render 'shared/error_messages', object: f.object %>
   <%= render 'shared/generic_error', object: f.object %>
+  <%# render 'shared/error_messages', object: f.object %>
 
   <%= f.hidden_field :tr_type, value: CASH_TR %>
 
   <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-4">
   <%= f.input :qty, label:'Amount', hint: "Deposit/Withdrawal Amount" %>
   </div>
-  <div class="col-md-5">
-  <%= f.input :date, value: Date.today %>
-  </div>
-  <div class="col-md-5">
+  <div class="col-md-8">
   <%= f.input :note %>
   </div>
   </div>
 
   <div class="row">
   <div class="col-md-12">
-  <%= f.submit 'Save Cash Transaction', class: "btn btn-primary btn-block" %>
+  <%= f.input :date, value: Time.now %>
   </div>
+  </div>
+
+  <div class="pt-3">
+  <%= f.submit 'Save Cash Transaction', class: "btn btn-info" %>
   </div>
 
 <% end %>

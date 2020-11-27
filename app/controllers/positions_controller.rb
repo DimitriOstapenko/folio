@@ -61,7 +61,7 @@ class PositionsController < ApplicationController
   def update
     if @position.update_attributes(position_params)
       flash[:success] = "Position updated"
-      redirect_to portfolio_positions_path(@portfolio)
+      redirect_to portfolios_path
     else
       render 'edit'
     end

@@ -13,4 +13,6 @@ Rails.application.routes.draw do
 
   get '/chart', to: 'static_pages#chart'
   get '/all_positions', to: 'positions#all_positions'
+  get 'taxes/index'
+  get 'taxes/show'
 end

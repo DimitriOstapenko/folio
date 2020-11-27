@@ -88,6 +88,10 @@ class Position < ApplicationRecord
     self.curval - self.acb
   end
 
+  def gail_base
+    self.curval_base - self.acb_base
+  end
+
   def gain_pc
     return 0 if self.acb.abs < 0.01
     sprintf("%.2f", self.gain / self.acb * 100) rescue 0

@@ -5,8 +5,8 @@
       <ul class="navbar-nav ml-auto ">
       <% if current_user %>
         <li class="<%= "active nav-item" if controller_name == 'portfolios' %>"><%= link_to "Portfolios", portfolios_path, class: "nav-link" %></li>
-        <li class="<%= "active nav-item" if controller_name == 'positions' %>"><%= link_to "Positions", all_positions_path, class: "nav-link" %></li>
         <li class="<%= "active nav-item" if controller_name == 'quotes' %>"><%= link_to "Quotes", quotes_path, class: "nav-link" %></li>
+        <li class="<%= "active nav-item" if controller_name == 'taxes' %>"><%= link_to "Taxes", taxes_index_path, class: "nav-link" %></li>
         <li class="<%= "active nav-item" if controller_name == 'static_pages' %>"><%= link_to "Net Worth", chart_path, class: "nav-link" %></li>
       <% else %>
         <li class="login_link"><%= link_to "<i class='fa fa-sign-in-alt'></i> Login".html_safe, new_user_session_path %></li>
