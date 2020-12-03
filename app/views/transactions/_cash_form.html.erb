@@ -3,6 +3,7 @@
   <%# render 'shared/error_messages', object: f.object %>
 
   <%= f.hidden_field :tr_type, value: CASH_TR %>
+  <!-- rest is set in the model -->
 
   <div class="row">
   <div class="col-md-4">
@@ -15,7 +16,7 @@
 
   <div class="row">
   <div class="col-md-12">
-  <%= f.input :date, value: Time.now %>
+  <%= f.input :date, value: Time.now, html5: true %>
   </div>
   </div>
 

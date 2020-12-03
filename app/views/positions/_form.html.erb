@@ -2,17 +2,20 @@
   <%= render 'shared/generic_error', object: f.object %>
 
   <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-2">
   <%= f.input :symbol, input_html: {onchange: 'SetQtyLabel();'} %>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
   <%= f.input :exch, collection: EXCHANGES, label: 'Exchange', include_blank: false %>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
   <%= f.input :qty, as: :integer, label: "Quantity"  %>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
     <%= f.input :acb, label: "Cost Base (#{@portfolio.currency_str})"  %>
+  </div>
+  <div class="col-md-4">
+    <%= f.input :note  %>
   </div>
   </div>
 

@@ -15,8 +15,7 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = @position.transactions.build(transaction_params)
-    if @transaction.valid?
-      @transaction.recalculate
+    if @transaction.save
       flash[:success] = "New transaction added"
       redirect_to portfolio_position_transactions_path(@portfolio, @position)
     else 
@@ -25,8 +24,12 @@ class TransactionsController < ApplicationController
   end
 
    def destroy
-     @transaction.destroy && @position.recalculate
-     flash[:success] = "Transaction for #{@position.symbol} deleted. "
+     @transaction.destroy
+     if @transaction.destroyed?
+       flash[:success] = "Transaction for #{@position.symbol} deleted. "
+     else 
+       flash[:danger] = "Error deleting transaction"
+     end
      redirect_to portfolio_position_transactions_path(@portfolio,@position)
   end
 
@@ -38,8 +41,9 @@ class TransactionsController < ApplicationController
 
   def update
     if @transaction.update_attributes(transaction_params)
-      @position.recalculate
       flash[:success] = "Transaction updated"
+    else 
+      flash[:danger] = "Error updating transaction"
     end
     redirect_to portfolio_position_transactions_path(@portfolio,@position)
   end
@@ -56,7 +60,7 @@ private
   end
 
   def transaction_params
-    params.require(:transaction).permit( :qty, :price, :tr_type, :fees, :acb, :gain, :ttl_qty, :cashdiv, :note, :date )
+    params.require(:transaction).permit( :qty, :price, :tr_type, :fees, :acb, :gain, :ttl_qty, :cash, :note, :date )
   end
 
   def sort_column

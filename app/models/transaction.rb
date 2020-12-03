@@ -1,46 +1,42 @@
 class Transaction < ApplicationRecord
   belongs_to :position
-  default_scope -> { order(created_at: :desc) }
+  default_scope -> { order(date: :desc) }
 
-  validates :qty, presence: true, numericality: true, if: Proc.new { |tr| (tr.tr_type != DRIP_TR)}
+  validates :qty, presence: true, numericality: true, if: Proc.new { |tr| (tr.tr_type != DIV_TR)}
   validates :tr_type, presence: true
 
   before_validation :set_attributes!
-#  before_validation :set_tr_type!
-  after_save :add_cash_div, if: Proc.new { |tr| (tr.tr_type == DRIP_TR)}
   validate :validate_tr
 
-#  def set_tr_type!
-#    self.tr_type = CASH_TR if self.position.is_cash?
-#  end
+  after_save :redo_position
+  after_destroy :redo_position
+
+  def redo_position
+    self.position.recalculate
+  end
 
   def set_attributes!
     self.qty ||= 0.0     # cash div
     self.price ||= 0.0   # cash div
+    self.date ||= Time.now
     case self.tr_type
     when BUY_TR
       self.qty = self.qty.abs
+      self.cash = -(self.amount + self.fees)
+      self.gain = 0
     when SELL_TR
       self.qty = -self.qty.abs
-    when DRIP_TR  # Cash dividend
+      self.cash = self.amount + self.fees
+    when DIV_TR 
       self.qty = self.qty.abs
     when CASH_TR
       self.price = 1.0
       self.fees = 0.0
+      self.cash = self.qty
     else 
       errors.add(:'Transaction Type', "is invalid")
     end
   end
-
-# add remaining cash from dividend reinvestment  
-  def add_cash_div
-    cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
-    if cash > 0
-      cash_position = self.base_cash_position
-      tr = cash_position.transactions.create(tr_type: CASH_TR, qty: cash, date: self.date, note: 'Cash from DRIP') if cash_position
-      tr.position.recalculate
-    end
-  end 
 
 # Find cash position in current position's base currency, if any  
   def base_cash_position
@@ -56,10 +52,10 @@ class Transaction < ApplicationRecord
   end
 
   def amount
-    if self.drip? && self.qty.zero?
-      self.cashdiv
+    if self.dividend? && self.qty.zero?
+      self.cash.abs
     else
-      self.price * self.qty rescue 0
+      (self.price * self.qty).abs rescue 0
     end
   end
 
@@ -75,43 +71,74 @@ class Transaction < ApplicationRecord
     self.tr_type == BUY_TR
   end
   
-  def drip?
-    self.tr_type == DRIP_TR
+  def dividend?
+    self.tr_type == DIV_TR
   end
 
+# not used  
 # Recalculate position and save it along with transaction  
-  def recalculate
+  def recalculate_prev
     return unless self.qty
     self.position.qty += self.qty if self.qty.present?
+    cash_pos = self.base_cash_position
+
     case self.tr_type
     when BUY_TR 
       self.position.acb += self.amount + self.fees
-      # Adjust cash
-      cash_pos = self.base_cash_position
-      qty = acb = -(self.amount + self.fees)
-      cash_pos.transactions.create(tr_type: CASH_TR, qty: qty, acb: acb, price: 1, ttl_qty: cash_pos.qty+qty, date: self.date, note: "bought #{self.qty} #{self.position.symbol} @ #{self.price} + #{self.fees} in fees" )
-      cash_pos.update_attribute(:qty, cash_pos.qty + qty)
-    when DRIP_TR
-      self.position.acb += self.amount if self.qty.present?
+      cash_pos.update_attribute(:qty, cash_pos.qty + self.cash) if cash_pos
+
     when SELL_TR
       self.position.acb += self.qty * self.position.avg_price
-      self.gain = -self.amount - self.fees + self.position.avg_price * self.qty
+      self.gain = self.amount - self.fees + self.position.avg_price * self.qty
+      cash_pos.update_attribute(:qty, cash_pos.qty + self.cash) if cash_pos
+
+    when DIV_TR
+      self.position.acb += self.amount if self.qty.present? # do not include cash dividend
+      cash = self.cash - (self.amount + self.fees)  # in portfolio currency
+      cash_pos.transactions.create(tr_type: CASH_TR, cash: cash, date: self.date, note: 'Cash from DRIP') if cash > 0 && cash_pos
+      cash_pos.recalculate
+
     when CASH_TR
-      self.position.acb += self.qty
+      self.position.acb += self.cash 
       self.gain = 0.0
     end
+
     self.acb = self.position.acb
     self.ttl_qty = self.position.qty
     self.position.save!
+  end
+
+
+# Fill missing fields in the transaction   
+  def recalculate(prev=nil)
+    return if self.frozen?
+    return unless self.qty
+    prev_ttl_qty = prev.present? ? prev.ttl_qty : 0
+    prev_acb = prev.present? ? prev.acb : 0
+
+    logger.debug ( "*********** #{prev_ttl_qty} : #{self.qty}" )
+    case self.tr_type
+    when BUY_TR
+      self.ttl_qty = prev_ttl_qty + self.qty
+      self.acb = prev_acb + self.amount + self.fees
+
+    when SELL_TR
+      self.ttl_qty = prev_ttl_qty + self.qty 
+      self.acb = prev_acb + prev_acb/prev_ttl_qty * self.qty
+      self.gain = self.amount - self.acb - self.fees
+
+    when CASH_TR
+      self.ttl_qty = prev_ttl_qty + self.qty 
+    end
   end
 
   def validate_tr
     case self.tr_type
     when SELL_TR
       errors.add(:qty, ': Insufficient number of shares') if self.position.qty < 0
-    when DRIP_TR
-      cash = self.cashdiv - (self.qty * self.price)  # in portfolio currency
-      errors.add(:cashdiv, ': Insufficient amount') if cash < 0
+    when DIV_TR
+      cash = self.cash - (self.qty * self.price)  # in portfolio currency
+      errors.add(:cash, ': Insufficient amount') if cash < 0
     end
   end
 

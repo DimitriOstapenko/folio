@@ -5,7 +5,6 @@ class Position < ApplicationRecord
   default_scope -> { order(symbol: :asc) }
 
   before_validation :set_attributes!
-#  before_save :set_currency_and_avg_price!
 
   validates :symbol, :currency, presence: true
   validates :symbol, uniqueness: {scope: :portfolio_id, message: "is already in portfolio" }
@@ -104,10 +103,14 @@ class Position < ApplicationRecord
 
 # Recalculate position after change of one of the transactions
   def recalculate
-    self.qty = self.acb = 0
+    self.qty = self.acb = 0; prev = nil;
     self.transactions.reverse.each do |tr|
-      tr.recalculate
+      tr.recalculate(prev)
+      prev = tr
     end
+    self.qty = prev.ttl_qty
+    self.acb = prev.acb
+    self.save!
   end
 
 end

@@ -6,7 +6,11 @@
   <div class="card p-3 bg-light">
   <div class="card-body">
 
-  <%= render 'form' %>
+  <% if @position.is_cash? %>
+    <%= render 'cash_form' %>
+  <% else %>
+    <%= render 'form' %>
+  <% end %>
 
   </div>
 </div>

@@ -30,7 +30,6 @@ class PositionsController < ApplicationController
     end
 
     if @position.save
-       flash[:success] = "New position created"
        if @position.is_cash?
          tr_type = CASH_TR
        elsif @position.qty > 0 
@@ -38,7 +37,10 @@ class PositionsController < ApplicationController
        else
          tr_type = SELL_TR
        end
-       @position.transactions.create(qty: @position.qty, ttl_qty: @position.qty, acb: @position.acb,  price: @position.acb/@position.qty, tr_type: tr_type)  unless @position.transactions.any?
+       
+ # Create first transaction if there's none      
+       @position.transactions.create!(qty: @position.qty, ttl_qty: @position.qty, acb: @position.acb, price: @position.acb/@position.qty, tr_type: tr_type, note: @position.note)  unless @position.transactions.any?
+       flash[:success] = "New position created"
        redirect_to portfolio_positions_path(@portfolio)
     else
        render 'new'
@@ -46,8 +48,8 @@ class PositionsController < ApplicationController
   end
 
   def destroy
-    flash[:success] = "Position #{@position.symbol} deleted. "
     @position.destroy
+    flash[:success] = "Position #{@position.symbol} deleted. "
     redirect_to portfolio_positions_path(@portfolio)
   end
 

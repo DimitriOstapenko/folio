@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_011837) do
+ActiveRecord::Schema.define(version: 2020_12_01_220333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 2020_11_20_011837) do
     t.float "acb"
     t.float "gain", default: 0.0
     t.float "ttl_qty", default: 0.0
-    t.float "cashdiv"
+    t.float "cash"
     t.string "note"
     t.datetime "date"
     t.index ["position_id"], name: "index_transactions_on_position_id"
