@@ -15,7 +15,8 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 
 # custom
-gem 'bootstrap', '~> 4.4', '>= 4.4.1'
+#gem 'bootstrap', '~> 4.4', '>= 4.4.1'
+gem 'bootstrap'
 gem 'sprockets-rails', '~> 3.2', '>= 3.2.1'
 gem 'will_paginate', '~> 3.3'
 #gem 'bootstrap-will_paginate', '>= 1.0.0'

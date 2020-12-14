@@ -1,0 +1,20 @@
+<%= render "header" %>  
+
+<table class="tbl2 table-hover table-striped table-bordered"> <!--class="table table-hover table-condensed" > -->
+  <thead>
+      <tr>
+        <th class="text-center">Date</th>
+        <th class="text-center">Symbol</th>
+        <th class="text-center">Quantity</th>
+        <th class="text-center">Notes</th>
+      </tr>
+  </thead>
+  <tbody>
+
+<%= render partial: "dividend", collection: @dividends %>
+
+ </tbody>
+</table>
+
+<%= will_paginate @dividends, class: "btn" %>
+</div>

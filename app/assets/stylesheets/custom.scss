@@ -1,3 +1,8 @@
+
+/* Override default colors here */
+//$link-color: #888;
+$link-color: #17a2b8;
+
 @import "bootstrap";
 
 @import "font-awesome-sprockets";
@@ -16,10 +21,12 @@ $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
 $brand-info:            #5bc0de !default;
 $state-danger-text:     #a94442 !default;
-
+$gold:     	        #C9B037; 
 
 $gray-medium-light: #eaeaea;
 $spacer: 1rem !default;
+
+//@import "bootstrap/variables";
 
 @mixin box_sizing {
   -moz-box-sizing:    border-box;
@@ -417,10 +424,19 @@ cursor: pointer;
 }
 
 .alert-link {
-  color: grey; 
+//  color: grey; 
 }
 
 .btn div {
   font-size:40px
 }
-  
+
+a.dropdown:hover, a.dropdown:active {
+  text-decoration: none !important;
+  outline: none !important;
+}
+
+.nounderline {
+  text-decoration: none !important;
+}
+

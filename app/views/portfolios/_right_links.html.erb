@@ -1,0 +1,9 @@
+<% actions = {'holdings': '', 'transactions': '', 'dividends': '', 'deposits':''} %>
+<% actions[action_name] = 'active' %>
+<%= link_to "Holdings", portfolio_holdings_path(@portfolio), class: "btn btn-info btn-sm #{actions['holdings']}" %>
+<%= link_to "Transactions", portfolio_transactions_path(@portfolio), class: "btn btn-primary btn-sm #{actions['transactions']}" %>
+<%= link_to "Dividends", portfolio_dividends_path(@portfolio), class: "btn btn-warning btn-sm #{actions['dividends']}" %>
+<%= link_to "Deposits", portfolio_deposits_path(@portfolio), class: "btn btn-success btn-sm #{actions['deposits']}" %>
+<% if @portfolio.taxable? %>
+<%= link_to "Taxes", portfolio_taxes_path(@portfolio), class: "btn btn-danger btn-sm #{actions['deposits']}" %>
+<% end %>

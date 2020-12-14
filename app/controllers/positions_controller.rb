@@ -6,11 +6,11 @@ class PositionsController < ApplicationController
 
   def index
     @portfolio = Portfolio.find(params[:portfolio_id])
-    @positions = @portfolio.positions
+    @positions = @portfolio.positions.paginate(page: params[:page])
   end
 
   def all_positions
-    @positions = Position.joins(:portfolio).where('portfolios.user_id': current_user.id)
+    @positions = Position.joins(:portfolio).where('portfolios.user_id': current_user.id).paginate(page: params[:page])
   end
 
   def new
@@ -30,20 +30,10 @@ class PositionsController < ApplicationController
     end
 
     if @position.save
-       if @position.is_cash?
-         tr_type = CASH_TR
-       elsif @position.qty > 0 
-         tr_type = BUY_TR
-       else
-         tr_type = SELL_TR
-       end
-       
- # Create first transaction if there's none      
-       @position.transactions.create!(qty: @position.qty, ttl_qty: @position.qty, acb: @position.acb, price: @position.acb/@position.qty, tr_type: tr_type, note: @position.note)  unless @position.transactions.any?
-       flash[:success] = "New position created"
-       redirect_to portfolio_positions_path(@portfolio)
+      flash[:success] = "New position created"
+      redirect_to portfolio_positions_path(@portfolio)
     else
-       render 'new'
+      render 'new'
     end
   end
 
@@ -78,7 +68,7 @@ class PositionsController < ApplicationController
   end
 
   def position_params
-    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency, :avg_price, :note )
+    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency, :avg_price, :cash, :fees, :gain, :note )
   end
 
   def sort_column

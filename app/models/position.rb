@@ -11,10 +11,14 @@ class Position < ApplicationRecord
   validates :qty, presence: true, numericality: true
   validates :acb, presence: true, numericality: true #{ greater_than_or_equal_to: 0 }
 
+  after_create :create_first_transaction
+
   def set_attributes!
     if self.is_cash?
-      self.acb = self.qty
+      self.acb ||= self.qty
+      self.cash ||= self.qty
       self.symbol = self.currency_str
+      self.avg_price = 1
       self.exch = nil
     end
     self.symbol.strip!.gsub!(/\s+/,' ') rescue ''
@@ -25,7 +29,15 @@ class Position < ApplicationRecord
     elsif self.exch == CA_EX
       self.currency = CAD
     end
-    self.avg_price = self.acb / self.qty rescue 0
+    self.avg_price = self.acb / self.qty unless self.is_cash?  rescue 0
+  end
+
+  def create_first_transaction
+    if self.is_cash?
+      self.transactions.create!(tr_type: CASH_TR, cash: self.qty, ttl_cash: self.qty, acb: self.qty, ttl_acb: self.qty, note: self.note)
+    else
+      self.transactions.create!(tr_type: BUY_TR, qty: self.qty.abs, ttl_qty: self.qty.abs, acb: self.acb, ttl_acb: self.acb, price: self.acb/self.qty, note: self.note)
+    end
   end
 
   def exchange
@@ -37,6 +49,11 @@ class Position < ApplicationRecord
     CURRENCIES.keys.include?(self.symbol.to_sym)  
   end
 
+# return sum of cash in the position
+#  def cash
+#    self.transactions.sum(:cash) rescue 0
+#  end  
+
 # Return currency symbol (:CAD, :EUR, :USD) 
   def currency_sym
     CURRENCIES.invert[self.currency]
@@ -46,7 +63,7 @@ class Position < ApplicationRecord
     CURRENCIES.invert[self.currency].to_s rescue nil
   end
 
-# Get current exchange rate relative to portfolio currency
+# Position exchange rate relative to portfolio currency 
   def fx_rate
     if self.portfolio.currency == CAD && self.currency == USD
       return USDCAD 
@@ -67,9 +84,14 @@ class Position < ApplicationRecord
 
 # Current market value in position currency 
   def curval
-    quote = Quote.get(self.symbol, self.exch) 
-    quote.latest_price = 1 if self.is_cash?  
-    self.qty * quote.latest_price rescue 0
+    if self.is_cash?
+      return self.cash if self.cash
+      return 0
+    else 
+      quote = Quote.get(self.symbol, self.exch) 
+      quote.latest_price = 1 if self.is_cash?  
+      self.qty * quote.latest_price rescue 0
+    end
   end
 
 # Current market value in portfolio currency (CAD)
@@ -82,34 +104,33 @@ class Position < ApplicationRecord
     self.acb * self.fx_rate
   end
 
-# Current gain  
-  def gain
-    self.curval - self.acb
+# Current paper gain in portoflio base currency 
+  def ppr_gain
+    return 0 if self.is_cash?
+    return (self.curval - self.acb) * self.fx_rate
   end
 
-  def gail_base
-    self.curval_base - self.acb_base
-  end
-
-  def gain_pc
+# Paper gain %  
+  def ppr_gain_pc
     return 0 if self.acb.abs < 0.01
-    sprintf("%.2f", self.gain / self.acb * 100) rescue 0
+    sprintf("%.2f", self.ppr_gain / self.acb * 100) rescue 0
   end
-
-# Locked in Cap Gain
-  def cap_gain
-    self.transactions.sum{ |tr| tr.gain * self.fx_rate } 
-  end  
 
 # Recalculate position after change of one of the transactions
-  def recalculate
-    self.qty = self.acb = 0; prev = nil;
-    self.transactions.reverse.each do |tr|
+  def recalculate(prev = nil)
+    self.qty = self.acb = 0; found = false; date =  prev.present? ? prev.date : self.last rescue '1900-01-01'.to_date
+    self.transactions.where(tr_type: [BUY_TR,SELL_TR,CASH_TR]).where('date>=?', date).reverse.each do |tr|
       tr.recalculate(prev)
       prev = tr
     end
-    self.qty = prev.ttl_qty
-    self.acb = prev.acb
+    if prev
+#      logger.debug("###########  prev: #{prev.inspect}")
+      self.qty = prev.ttl_qty 
+      self.acb = prev.ttl_acb 
+      self.cash = prev.ttl_cash
+      self.fees = self.transactions.sum(:fees) * self.fx_rate
+      self.gain = self.transactions.where(tr_type: SELL_TR).sum(:gain) * self.fx_rate
+    end
     self.save!
   end
 

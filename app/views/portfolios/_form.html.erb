@@ -1,18 +1,22 @@
 <%= simple_form_for @portfolio do |f| %>
   <%# render 'shared/error_messages', object: f.object %>
   <%= render 'shared/generic_error', object: f.object %>
+  <% readonly = (action_name == 'edit') ? true : false %>
 
   <div class="row">
   <div class="col-md-3">
   <%= f.input :name, hint: "Descriptive portfolio name" %>
   </div>
   <div class="col-md-3">
+    <%= f.input :cash_in, readonly: readonly, input_html: {value: @portfolio.cash}  %>
+  </div>
+  <div class="col-md-2">
     <%= f.input :cashonly, label: 'Cash Only?', collection: [['Yes', 'true'], ['No', 'false']], include_blank: false %>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
   <%= f.input :currency, collection: CURRENCIES, include_blank: false %>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
   <%= f.input :taxable, label: 'Taxable?', collection: [['Yes', 'true'], ['No', 'false']], include_blank: false %>
   </div>
   </div>

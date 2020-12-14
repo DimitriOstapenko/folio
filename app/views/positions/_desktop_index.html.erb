@@ -1,0 +1,47 @@
+<table class="table table-condensed table-hover table-striped table-bordered" >
+  <thead class="table-info"> 
+      <tr>
+          <th class="text-center">Symbol</th>
+          <th class="text-center">Currency </th>
+          <th class="text-center">Quantity</th>
+          <th class="text-center">Avg. Price</th>
+          <th class="text-center">ACB </th>
+          <th class="text-center">Cur. Value (<%= @portfolio.currency_str %>) </th>
+          <th class="text-center">Ppr. Gain</th>
+          <th class="text-center">Ppr. Gain %</th>
+          <th class="text-center">Cash</th>
+          <th></th>
+          <th></th>
+      </tr>
+  </thead>
+  <tbody>
+
+  <%= render @positions %>
+
+  </tbody>
+  <tfoot>
+    <th colspan=4>Totals in <%= @portfolio.currency_str %></th>
+    <th class="text-center"><%= to_currency @portfolio.acb %></th>
+    <th class="text-center"><%= to_currency @portfolio.curval %></th>
+    <th class="text-center"><%= to_currency @portfolio.ppr_gain  %></th>
+    <th class="text-center"><%= sprintf "%.2f", @portfolio.ppr_gain_pc %>%</th>
+    <th class="text-center"><%= to_currency @portfolio.cash  %></th>
+    <th colspan=2></th>
+  </tfoot>
+</table>
+
+<div class="row">
+  <% unless @portfolio.cashonly? %>
+  <div class="col-md-2 pt-2">
+    <%= button_to "Add Position", new_portfolio_position_path(@portfolio), class: "btn btn-info", method: :get %>
+  </div>
+  <% end %>
+
+  <% if @portfolio.has_available_cash_position? %>
+  <div class="col-md-2 pt-2">
+    <%= button_to "Add Cash Position", new_portfolio_position_path(@portfolio), class: "btn btn-success", method: :get, params: {addcash: 1} %>
+  </div>
+  <% end %>
+</div>
+
+

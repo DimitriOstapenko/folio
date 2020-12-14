@@ -1,0 +1,32 @@
+<% scroll = "table-responsive" if mobile_device? %>
+
+<%= render "header" %>  
+
+<% @portfolio.positions.each do |position| %>
+<% next if position.is_cash? %>
+<table class="table table-condensed table-hover table-striped table-bordered <%= scroll %>" >
+  <caption class="text-info"><%= position.symbol %> Transactions </caption>
+  <thead>
+    <tr>
+    <th class="text-center">Symbol</th>
+    <th class="text-center">Date</th>
+    <th class="text-center">Type</th>
+    <th class="text-center">Shares</th>
+    <th class="text-center">ACB</th>
+    <th class="text-center">Proceeds</th>
+    <th class="text-center">Gain/Loss</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: 'taxes', collection: position.transactions, as: :transaction %>
+  </tbody>
+  <tr>
+    <th colspan=3></th>
+    <th class="text-center"><%= position.qty %></th>
+    <th class="text-center"><%= to_currency position.acb, precision: 0 %></th>
+    <th class="text-center"><%= to_currency position.curval, precision: 0 %></th>
+    <th class="text-center"><%= to_currency position.gain, precision: 0 %></th>
+  </tr>
+</table>
+<% end %>
+</div>

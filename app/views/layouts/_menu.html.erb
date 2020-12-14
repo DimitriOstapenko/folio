@@ -1,23 +1,15 @@
 <% if current_user %>
-  <ul class="nav navbar-nav navbar-left">
-<button class="navbar-toggler" type="button" data-toggle="dropdown" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarDropdown">
-    <ul class="nav navbar-nav navbar-left">
-      <li class="nav-item dropdown">
-        <a class="nav-link" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <i class="fa fa-bars fa-lg text-muted"></i>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id), class: "dropdown-item" %>
-          <%# link_to "<i class='fa fa-chart-area'></i> Net Worth chart".html_safe, chart_path, class: "dropdown-item" %>
-          <%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete, class: "dropdown-item" %>
-        </div>
-      </li>
-    </ul>
+<ul class="nav navbar-nav navbar-left">
+<div class="dropdown show lead" id="navbarDropdown" style="z-index: 1000">
+  <a class="dropdown" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fa fa-bars fa-lg text-muted"></i>
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+     <%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id), class: "dropdown-item" %>
+     <%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete, class: "dropdown-item" %>
   </div>
-  </ul>
+</div>
+</ul>
 <% end %>
 
 <!--

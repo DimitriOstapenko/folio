@@ -1,0 +1,12 @@
+<!-- portfolio dropdown in submenu -->
+<div class="dropdown show pb-1 ml-2 lead">
+  <a class="dropdown-toggle nounderline" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <b><%= @portfolio.name %> (<%= @portfolio.currency_str %>) : <%= action_name.pluralize.capitalize %></b>
+  </a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+  <% current_user.portfolios.each do |port| %>
+    <%= link_to port.name, eval("portfolio_#{action_name}_path(port)"), class: "dropdown-item" %> 
+  <% end %>
+  </div>
+</div>

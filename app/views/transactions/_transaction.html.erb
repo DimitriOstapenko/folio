@@ -1,22 +1,20 @@
 <% cl = 'table-warning' if transaction.sell? %>
 <tr class="<%= cl %>">
-  <td class="text-center"><%= transaction.date.to_date rescue '-' %></td>
+<td class="text-center"><%= transaction.position.symbol %></td>
+<td class="text-center"><%= transaction.date.to_date rescue '-' %></td>
 <td class="text-center"><%= transaction.tr_type_str %></td>
 <td class="text-center"><%= transaction.qty.to_i %></td>
 <td class="text-center"><%= to_currency transaction.price, precision: 2, locale: transaction.locale %></td>
 <td class="text-center"><%= to_currency transaction.amount, precision: 0, locale: transaction.locale %></td>
-<td class="text-center"><%= to_currency transaction.fees, precision: 2, locale: transaction.locale %></td>
-<td class="text-center"><%= to_currency transaction.gain, precision: 2, locale: transaction.locale %></td>
+<td class="text-center"><%= to_currency transaction.fees, precision: 2, locale: transaction.locale if transaction.fees.abs > 0 %></td>
+<td class="text-center"><%= to_currency transaction.gain, precision: 2, locale: transaction.locale if transaction.gain.abs > 0 %></td>
 <td class="text-center"><%= transaction.ttl_qty %></td>
-<td class="text-center"><%= to_currency transaction.acb, precision: 0, locale: transaction.locale %></td>
-<td class="text-center"><%= to_currency transaction.acb_share, precision: 4, locale: transaction.locale %></td>
-  <%# if transaction_counter == 0 %>
-  <% if true %>
-<td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_position_transaction_path(@portfolio,@position,transaction) %> </td>
-<td class="text-center"><%= link_to '<i class="far fa-trash-alt"></i>'.html_safe, portfolio_position_transaction_path(@portfolio,@position,transaction), method: :delete, data: { confirm: "Are you sure you want to delete transaction for #{@position.symbol}?" } %></td>
-  <% else %>
-    <td colspan=2></td>    
-  <% end %>
+<td class="text-center"><%= to_currency transaction.ttl_acb, precision: 0, locale: transaction.locale if transaction.ttl_acb %></td>
+<td class="text-center"><%= to_currency transaction.acb_share, precision: 4, locale: transaction.locale if transaction.acb_share.abs > 0 %></td>
+<td class="text-center"><%= to_currency transaction.ttl_cash, precision: 0 %></td>
+<td class="text-center"><%= transaction.note %></td>
+<td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_position_transaction_path(@portfolio,transaction.position,transaction) %> </td>
+<td class="text-center"><%= link_to '<i class="far fa-trash-alt"></i>'.html_safe, portfolio_position_transaction_path(@portfolio,transaction.position,transaction), method: :delete, data: { confirm: "Are you sure you want to delete transaction for #{transaction.position.symbol}?" } %></td>
 </tr>
 
 

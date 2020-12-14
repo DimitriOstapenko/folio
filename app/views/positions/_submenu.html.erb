@@ -1,0 +1,15 @@
+<% template = '/positions/portfolio_dropdown' %> <%#action_name == 'index' ? 'portfolio_dropdown' : action_name %>
+
+<div class="row ml-1">
+  <div>
+    <%= render template %>
+  </div>
+
+  <div class="ml-auto mr-3 lead">
+    <%= link_to "Dividends", portfolio_dividends_path(@portfolio), class: "badge badge-pill badge-primary" %>
+    <%= link_to "Deposits", portfolio_deposits_path(@portfolio), class: "badge badge-pill badge-success" %>
+    <%= link_to "Positions", portfolio_positions_path(@portfolio), class: "badge badge-pill badge-info" %>
+  </div>
+</div>
+
+

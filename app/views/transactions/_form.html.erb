@@ -7,10 +7,10 @@
     <%= f.input :tr_type, label: 'Transaction',  collection: TRANSACTION_TYPES, include_blank: false  %>
   </div>
   <div class="col-md-3" id="cashdiv" style=<%= 'display:none;' unless @transaction.dividend? %> >
-  <%= f.input :cash, label: "Cash Dividend"  %>
+  <%= f.input :cash, label: "Dividend Cash"  %>
   </div>
   <div class="col-md-3">
-  <%= f.input :qty, as: :integer, label: "Quantity"  %>
+  <%= f.input :qty, as: :integer, label: "Shares"  %>
   </div>
   <div class="col-md-3">
     <%= f.input :price  %>
@@ -21,8 +21,11 @@
   </div>
 
   <div class="row">
-  <div class="col-md-12">
+  <div class="col-md-6">
     <%= f.input :date, html5: true %>
+  </div>
+  <div class="col-md-6">
+    <%= f.input :note  %>
   </div>
   </div>
 

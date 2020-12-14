@@ -5,14 +5,11 @@ Rails.application.routes.draw do
 
   resources :quotes #, :users
   resources :portfolios do
-    get 'add_cash', on: :member
-    resources :positions do  #, only: [:index, :show, :create, :destroy]
-       resources :transactions
+    get 'transactions', 'dividends', 'deposits', 'holdings', 'taxes'
+    resources :positions do 
+      resources :transactions
     end
   end
 
   get '/chart', to: 'static_pages#chart'
-  get '/all_positions', to: 'positions#all_positions'
-  get 'taxes/index'
-  get 'taxes/show'
 end

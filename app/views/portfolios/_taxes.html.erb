@@ -1,5 +1,6 @@
-<% cl = 'table-warning' if transaction.sell? %>
+<% cl = 'table-success' if transaction.sell? %>
 <tr class="<%= cl %>">
+  <td class="text-center"><%= transaction.position.symbol %></td>
   <td class="text-center"><%= transaction.date rescue '-' %></td>
   <td class="text-center"><%= transaction.tr_type_str %></td>
   <td class="text-center"><%= transaction.qty.to_i %></td>
@@ -7,5 +8,4 @@
   <td class="text-center"><%= to_currency transaction.amount, precision: 0, locale: transaction.locale %></td>
   <td class="text-center"><%= to_currency transaction.gain, precision: 2, locale: transaction.locale %></td>
 </tr>
-
 

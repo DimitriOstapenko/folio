@@ -1,7 +1,7 @@
 class PortfoliosController < ApplicationController
 
   before_action :logged_in_user
-  before_action :init, only: [:show, :edit, :update, :destroy, :add_cash ]
+  before_action :init, only: [:show, :edit, :update, :destroy, :add_cash, :dividends, :deposits, :holdings, :transactions, :taxes ]
   
   helper_method :sort_column, :sort_direction
 
@@ -21,14 +21,15 @@ class PortfoliosController < ApplicationController
     else
       @fx = 1
       @fx = eval "CAD#{CURRENCIES.invert[@base_currency.to_i]}" if @base_currency.to_i != CAD
-      @total_cash = @portfolios.sum{ |p| p.cash * p.fx_rate } * @fx
-      @total_acb = @portfolios.sum{ |p| p.acb * p.fx_rate } * @fx
-      @total_curval = @portfolios.sum{ |p| p.curval * p.fx_rate } * @fx 
+      @total_cash = @portfolios.sum{|p| p.cash * p.fx_rate } * @fx
+      @total_acb = @portfolios.sum{|p| p.acb * p.fx_rate } * @fx
+      @total_curval = @portfolios.sum{|p| p.curval * p.fx_rate } * @fx 
+
 #      flash[:success] = "bFx: #{@fx}"
     end
-    @total_gain = @total_curval - @total_acb
-    @total_gain_pc = @total_gain / @total_curval * 100 rescue 0
-    @total_base_value = @total_curval 
+    @total_rgain = @portfolios.sum{|p| p.gain * p.fx_rate } * @fx
+    @total_ppr_gain = @portfolios.sum{|p| p.ppr_gain }
+    @total_ppr_gain_pc = @total_ppr_gain / @total_curval * 100 rescue 0
 
 #    flash[:success] = "Showing portfolios in #{@portfolios[0].currency_str}" if @currency.present?
   end
@@ -52,7 +53,6 @@ class PortfoliosController < ApplicationController
   end
 
   def show
-    @positions = @portfolio.positions
   end
 
   def update
@@ -64,31 +64,52 @@ class PortfoliosController < ApplicationController
     end
   end
 
-# Add cash transaction   
-  def add_cash
-    @position = @portfolio.positions.find_by(symbol: 'CASH') || @portfolio.positions.new(symbol: 'CASH')
-    @transaction = @position.transactions.new(tr_type: CASH_TR, price: 1.0, fees: 0.0 )
-
-#     cash = params[:qty]
-#     @portfolio.update_attribute(cash: @portfolio.cash + cash)
-#    @portfolio.position.create(symbol: 'CASH', exch: '', currency: @portfolio.currency, qty: params[:qty])
-  end
-
   def destroy
     flash[:success] = "Portfolio #{@portfolio.name} deleted. "
     @portfolio.destroy
     redirect_to portfolios_path
   end
 
+  def dividends
+    @dividends = Transaction.joins(:position).where('positions.portfolio_id': @portfolio.id).where(tr_type: DIV_TR)
+    @dividends = @dividends.paginate(page: params[:page])
+
+#    flash[:warning] = "Portfolio: #{@portfolio.inspect}"
+  end
+
+  def deposits
+    @deposits = Transaction.joins(:position).where('positions.portfolio_id': @portfolio.id).where(tr_type: CASH_TR)
+    @deposits = @deposits.paginate(page: params[:page])
+  end
+  
+  def holdings
+  end
+  
+# all transactions across all portoflios  @transactions = Transaction.joins(:position).merge(Position.joins(:portfolio)).where('portfolios.user_id': current_user.id)
+  def transactions
+    @transactions = Transaction.joins(:position).merge(Position.joins(:portfolio)).where('positions.portfolio.id': @portfolio.id).where('positions.currency': @portfolio.currency)
+    @transactions = @transactions.paginate(page: params[:page], per_page: 30)
+  end
+
+  def taxes
+#    @taxes = Transaction.joins(:position).merge(Position.joins(:portfolio)).where('positions.portfolio.id': @portfolio.id).where('portfolios.taxable': true)
+  end
+
   private
 
   def init
-    @portfolio = Portfolio.find(params[:id]) rescue nil
-    (flash[:warning]="Portfolio not found"; redirect_to portfolios_path) unless @portfolio
+    id = params[:portfolio_id] || params[:id]
+    @portfolio = Portfolio.find(id)
+
+    if @portfolio.present?
+      @positions = @portfolio.positions
+    else
+      flash[:warning] = "Portfolio ** #{params.inspect} not found"
+    end
   end
 
   def portfolio_params
-    params.require(:portfolio).permit( :name, :currency, :cashonly, :taxable )
+    params.require(:portfolio).permit( :name, :currency, :cashonly, :taxable, :cash_in )
   end
 
   def sort_column

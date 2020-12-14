@@ -4,16 +4,23 @@ class Portfolio < ApplicationRecord
   has_many :positions, :dependent => :destroy
   has_many :portfolio_histories, :dependent => :destroy
   validates :name, presence: true, length: { maximum: 50 }
-  validates :cash, :currency, presence: true, numericality: true
+  validates :currency, presence: true, numericality: true
+  attr_accessor :cash_in # passing this to new position on portfolio creation
 
   default_scope -> { order(name: :asc) }
 
   belongs_to :user
 
   before_validation :set_attributes!
+  after_create :create_cash_position
 
   def set_attributes!
     self.currency ||= :CDN
+  end
+
+# Create cash position in base currency;   
+  def create_cash_position
+    self.positions.create!(qty: self.cash_in, currency: self.currency, symbol: self.currency_str, note: 'Initial deposit' ) 
   end
 
 # Get current CAD exchange rate 
@@ -48,9 +55,9 @@ class Portfolio < ApplicationRecord
     CURRENCIES.invert[self.currency]
   end
 
-# Calculate cash in base currency
+# Calculate cash in base currency 
   def cash
-    self.positions.sum{|pos| pos.is_cash? ? pos.curval_base : 0}
+    self.positions.sum(:cash)
   end
 
 # Adjusted cost base of all positions in portfolio currency
@@ -63,16 +70,21 @@ class Portfolio < ApplicationRecord
     self.positions.sum{|pos| pos.curval_base} 
   end
 
+  def fees
+    self.positions.sum(:fees) 
+  end
+
+  def ppr_gain
+    self.positions.sum{|pos| pos.ppr_gain} 
+  end
+
+  def ppr_gain_pc
+    self.ppr_gain / self.acb * 100 rescue 0
+  end
+
+# Cap gain  
   def gain
-      self.curval - self.acb
-  end
-
-  def gain_pc
-    self.gain / self.acb * 100 rescue 0
-  end
-
-  def total_cad
-    self.curval * self.fx_rate
+    self.positions.sum(:gain) 
   end
 
 # check if position in one or more of the supported currencies is not in portfolio yet  
