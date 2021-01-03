@@ -14,8 +14,8 @@ class TransactionsController < ApplicationController
   end
 
   def create
+#    logger.debug("**** #{@position.inspect} ") 
     @transaction = @position.transactions.build(transaction_params)
-#    prev = @position.transactions.where('date <?', @transaction.date).first rescue nil
     if @transaction.save!
       @position.recalculate
       flash[:success] = "New transaction added"
@@ -43,7 +43,7 @@ class TransactionsController < ApplicationController
   end
 
   def update
-    if @transaction.update_attributes(transaction_params)
+    if @transaction.update(transaction_params)
       @position.recalculate
       flash[:success] = "Transaction updated"
     else 

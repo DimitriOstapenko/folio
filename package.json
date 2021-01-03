@@ -2,6 +2,7 @@
   "name": "folio",
   "private": true,
   "dependencies": {
+    "bootstrap-icons": "^1.2.2",
     "chart.js": "^2.9.4",
     "chartkick": "^3.2.1"
   }

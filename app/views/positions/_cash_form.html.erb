@@ -2,11 +2,11 @@
   <%= render 'shared/generic_error', object: f.object %>
 
   <%= f.hidden_field :symbol %>
-  <% currencies = (action_name == 'new')? CURRENCIES.except(@portfolio.currency_sym) : CURRENCIES %>
+  <%# currencies = (action_name == 'new')? CURRENCIES.except(@portfolio.currency_sym) : CURRENCIES %>
 
   <div class="row">
   <div class="col-md-3">
-  <%= f.input :currency, collection: currencies, include_blank: false %>
+  <%= f.input :currency, collection: CURRENCIES, include_blank: false %>
   </div>
   <div class="col-md-3">
   <%= f.input :qty, label:'Amount', hint: "Deposit/Withdrawal Amount" %>
@@ -17,7 +17,7 @@
   </div>
 
   <div class="pt-3">
-  <%= f.submit 'Save Cash Position', class: "btn btn-info", onclick: "set_symbol();" %>
+  <%= f.submit 'Save Cash Transaction', class: "btn btn-info", onclick: "set_symbol();" %>
   </div>
 
 <% end %>

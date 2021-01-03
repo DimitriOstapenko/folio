@@ -2,7 +2,8 @@
 
 <div class="row justify-content-md-center">
 <div class="col-md-8">
-  <h5><%= @portfolio.name %> <%= @portfolio.cashonly? ? '(Cash Portfolio)':'' %>: New Position</h5>
+  <% label = params[:addcash] ? 'Add Cash' : 'New Position'  %>
+  <h5><%= @portfolio.name %> <%= @portfolio.cashonly? ? '(Cash Portfolio)':'' %>: <%= label %></h5>
 <div class="card p-3 bg-light">
   <div class="card-body">
 

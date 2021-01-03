@@ -1,12 +1,13 @@
 
 /* Override default colors here */
-//$link-color: #888;
-$link-color: #17a2b8;
+$link-color: #777; //17a2b8;
+$brand-info: #39C0ED !default;
 
 @import "bootstrap";
 
-@import "font-awesome-sprockets";
-@import "font-awesome";
+//@import "font-awesome-sprockets";
+//@import "font-awesome";
+@import "bootstrap-icons/font/bootstrap-icons.css";  // choose on or the other!!
 
 $theme-colors: ( "bootstrap": #563d7c, "simpleform": #00617f );
 @import "simple_form-bootstrap/simple_form-bootstrap";
@@ -19,7 +20,6 @@ $gray:                   lighten($gray-base, 33.5%) !default; // #555
 $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
-$brand-info:            #5bc0de !default;
 $state-danger-text:     #a94442 !default;
 $gold:     	        #C9B037; 
 
@@ -125,6 +125,9 @@ td.hlight {
 
 /* header */
 
+.hdr-link {
+ color: white;
+}
 
 /* footer */
 
@@ -289,48 +292,22 @@ select {
   width: 30%;
 }
 
-.tbl td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.tbl th {
-  background: grey;
+thead  th{
+  background: $brand-info;  //#17a2b8; // bs5 info
   color: white;
-  height: 25px;
 }
 
-.td-center {
-  text-align: center;
+.table td{
+  padding: 3px;
 }
 
-// Temp!!!!
-.tbl2 th {
-  background: $brand-info; //#5bc0de;
-  color: white;
-  height: 28px;
-  padding: 2px;
-}
-.tbl2 th,td {
-  font-size: 1em;
-  padding: 2px 5px;
-}
-
-.tbl td,
-.tbl th {
-  text-align: left;
-  padding: 0px 5px;
-  font-size: 1em;
-}
-
-.tbl tr:nth-child(even) {
-  background: lightblue;
+caption {
+  caption-side: top;
 }
 
 .table-hover tbody tr:hover td {
     background: $gray-lighter; //#5bc0de;
 }
-
 
 .table-wrapper-scroll-x {
  display: block;

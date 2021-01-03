@@ -9,4 +9,9 @@
     <%= link_to port.name, eval("portfolio_#{action_name}_path(port)"), class: "dropdown-item" %> 
   <% end %>
   </div>
+  
+  <span class="pl-5"> Cash: <%= to_currency @portfolio.cash_base %> </span>
 </div>
+
+
+

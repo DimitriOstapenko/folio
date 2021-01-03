@@ -1,12 +1,12 @@
 <nav class="navbar navbar-expand-sm navbar-light">
     <%= render 'layouts/menu'  %>
-    <a class="navbar-brand pl-5 text-success display-6" href="/">Folio <i class='fa fa-coins'></i> </a>
+    <a class="navbar-brand pl-5 text-success display-6" href="/">Folio</a> <i class='bi-bar-chart lead text-info'></i>  <!-- <i class='fa fa-coins'></i> -->
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ml-auto ">
       <% if current_user %>
-        <li class="<%= "active nav-item" if controller_name == 'portfolios' %>"><%= link_to "<i class='fa fa-book'></i> Portfolios".html_safe, portfolios_path, class: "nav-link" %></li>
-        <li class="<%= "active nav-item" if controller_name == 'quotes' %>"><%= link_to "<i class='fa fa-question-circle'></i> Quotes".html_safe, quotes_path, class: "nav-link" %></li>
-        <li class="<%= "active nav-item" if controller_name == 'static_pages' %>"><%= link_to "<i class='fa fa-chart-pie'></i> Net Worth".html_safe, chart_path, class: "nav-link" %></li>
+        <li class="<%= "active nav-item" if controller_name == 'portfolios' %>"><%= link_to "<i class='bi-journals'></i> Portfolios".html_safe, portfolios_path, class: "nav-link" %></li>
+        <li class="<%= "active nav-item" if controller_name == 'quotes' %>"><%= link_to "<i class='bi-question-circle'></i> Quotes".html_safe, quotes_path, class: "nav-link" %></li>
+        <li class="<%= "active nav-item" if controller_name == 'static_pages' %>"><%= link_to "<i class='bi-graph-up'></i> Net Worth".html_safe, chart_path, class: "nav-link" %></li>
       <% else %>
         <li class="login_link"><%= link_to "<i class='fa fa-sign-in-alt'></i> Login".html_safe, new_user_session_path %></li>
       <% end %>

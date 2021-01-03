@@ -19,21 +19,29 @@ class PositionsController < ApplicationController
     @transaction = @position.transactions.new
   end
 
+# Create new position or new cash transaction  
   def create
     @portfolio = Portfolio.find(params[:portfolio_id])
-    @position = @portfolio.positions.build(position_params)
-
-    if @portfolio.positions.exists?(symbol: @position.symbol)
-      flash[:danger] = "Position #{@position.symbol} is already in portfolio. Try adding transaction"
-      redirect_to portfolio_positions_path(@portfolio)
-      return
-    end
-
-    if @position.save
-      flash[:success] = "New position created"
-      redirect_to portfolio_positions_path(@portfolio)
-    else
-      render 'new'
+    newpos = @portfolio.positions.build(position_params)
+    @position = @portfolio.positions.find_by(symbol: newpos.symbol) 
+    if @position.present?
+      if @position.is_cash?
+        flash[:success] = "Cash added"
+        @position.transactions.create!(tr_type: CASH_TR, cash: newpos.qty, acb: newpos.qty, note: newpos.note)
+        @position.recalculate
+        redirect_to portfolio_positions_path(@portfolio)
+      else   
+        flash[:danger] = "Position #{symbol} is already in portfolio. Try adding transaction"
+        redirect_to portfolio_positions_path(@portfolio)
+      end
+    else 
+      if newpos.save
+        @position = newpos 
+        flash[:success] = "New position created"
+        redirect_to portfolio_positions_path(@portfolio)
+      else
+        render 'new'
+      end
     end
   end
 
@@ -51,9 +59,9 @@ class PositionsController < ApplicationController
   end
 
   def update
-    if @position.update_attributes(position_params)
+    if @position.update(position_params)
       flash[:success] = "Position updated"
-      redirect_to portfolios_path
+      redirect_to portfolio_positions_path(@portfolio)
     else
       render 'edit'
     end
@@ -68,7 +76,7 @@ class PositionsController < ApplicationController
   end
 
   def position_params
-    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency, :avg_price, :cash, :fees, :gain, :note )
+    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency, :avg_price, :cash, :fees, :gain, :note, :pos_type )
   end
 
   def sort_column

@@ -1,14 +1,14 @@
-<div class="container-fluid">
+<% scroll = "table-responsive" if mobile_device? %>
 
 <%= render "header" %>
 
-<table class="tbl2 table-hover table-striped table-bordered"> <!--class="table table-hover table-condensed" > -->
+<table class="table table-hover table-striped <%= scroll %>"> 
   <thead>
       <tr>
         <th class="text-center">Date</th>
         <th class="text-center">Symbol</th>
         <th class="text-center">Quantity</th>
-        <th class="text-center">Ttl Qty</th>
+        <th class="text-center">Total</th>
         <th class="text-center">Notes</th>
       </tr>
   </thead>
@@ -21,4 +21,3 @@
 
 <%= will_paginate @deposits, class: "btn" %>
 
-</div>

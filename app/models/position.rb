@@ -15,11 +15,14 @@ class Position < ApplicationRecord
 
   def set_attributes!
     if self.is_cash?
-      self.acb ||= self.qty
+      self.pos_type = CASH_POS
+      self.acb = 0  
       self.cash ||= self.qty
       self.symbol = self.currency_str
       self.avg_price = 1
       self.exch = nil
+    else 
+      self.pos_type = STOCK_POS
     end
     self.symbol.strip!.gsub!(/\s+/,' ') rescue ''
     self.symbol.upcase!
@@ -44,15 +47,19 @@ class Position < ApplicationRecord
     EXCHANGES.invert[self.exch].to_s rescue nil
   end
 
+  def locale
+    self.currency == EUR ? :fr : :ca 
+  end
+
 # Is it cash position?
   def is_cash?
     CURRENCIES.keys.include?(self.symbol.to_sym)  
   end
 
-# return sum of cash in the position
-#  def cash
-#    self.transactions.sum(:cash) rescue 0
-#  end  
+# Position cash in base currency
+  def cash_base
+    self.cash * self.fx_rate    
+  end  
 
 # Return currency symbol (:CAD, :EUR, :USD) 
   def currency_sym
@@ -85,11 +92,9 @@ class Position < ApplicationRecord
 # Current market value in position currency 
   def curval
     if self.is_cash?
-      return self.cash if self.cash
-      return 0
+      return self.cash rescue 0
     else 
       quote = Quote.get(self.symbol, self.exch) 
-      quote.latest_price = 1 if self.is_cash?  
       self.qty * quote.latest_price rescue 0
     end
   end
@@ -125,12 +130,13 @@ class Position < ApplicationRecord
     end
     if prev
 #      logger.debug("###########  prev: #{prev.inspect}")
-      self.qty = prev.ttl_qty 
       self.acb = prev.ttl_acb 
+      self.qty = prev.ttl_qty 
       self.cash = prev.ttl_cash
       self.fees = self.transactions.sum(:fees) * self.fx_rate
       self.gain = self.transactions.where(tr_type: SELL_TR).sum(:gain) * self.fx_rate
     end
+#      logger.debug("########### pos : #{self.inspect}")
     self.save!
   end
 

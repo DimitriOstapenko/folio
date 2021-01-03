@@ -1,7 +1,7 @@
 class PortfoliosController < ApplicationController
 
   before_action :logged_in_user
-  before_action :init, only: [:show, :edit, :update, :destroy, :add_cash, :dividends, :deposits, :holdings, :transactions, :taxes ]
+  before_action :init, only: [:show, :edit, :update, :destroy, :add_cash, :dividends, :deposits, :holdings, :transactions, :taxes, :trades ]
   
   helper_method :sort_column, :sort_direction
 
@@ -56,7 +56,7 @@ class PortfoliosController < ApplicationController
   end
 
   def update
-    if @portfolio.update_attributes(portfolio_params)
+    if @portfolio.update(portfolio_params)
       flash[:success] = "Portfolio updated"
       redirect_to portfolios_path
     else
@@ -83,11 +83,12 @@ class PortfoliosController < ApplicationController
   end
   
   def holdings
+    @positions = @positions.where(pos_type: STOCK_POS).paginate(page: params[:page])
   end
   
 # all transactions across all portoflios  @transactions = Transaction.joins(:position).merge(Position.joins(:portfolio)).where('portfolios.user_id': current_user.id)
-  def transactions
-    @transactions = Transaction.joins(:position).merge(Position.joins(:portfolio)).where('positions.portfolio.id': @portfolio.id).where('positions.currency': @portfolio.currency)
+  def trades
+    @transactions = Transaction.joins(:position).merge(Position.joins(:portfolio)).where('positions.portfolio.id': @portfolio.id).where('positions.pos_type': STOCK_POS)
     @transactions = @transactions.paginate(page: params[:page], per_page: 30)
   end
 

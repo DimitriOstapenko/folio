@@ -3,8 +3,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.4'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.4', '>= 5.2.4.3'
+#gem 'rails', '~> 5.2.4', '>= 5.2.4.3'
+gem 'rails', '~> 6.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use Puma as the app server
@@ -13,13 +13,15 @@ gem 'puma', '~> 3.11'
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
+gem 'image_processing', '~> 1.12', '>= 1.12.1'
 
 # custom
-#gem 'bootstrap', '~> 4.4', '>= 4.4.1'
-gem 'bootstrap'
+gem 'bootstrap', '~> 4.5', '>= 4.5.3'
+#gem 'bootstrap', '~> 5.0.0.beta1'
+#gem 'bootstrap-icons-helper'
+
 gem 'sprockets-rails', '~> 3.2', '>= 3.2.1'
 gem 'will_paginate', '~> 3.3'
-#gem 'bootstrap-will_paginate', '>= 1.0.0'
 
 gem 'will_paginate-bootstrap4', '~> 0.2.2'
 gem 'jquery-rails'
@@ -27,9 +29,7 @@ gem 'select2-rails'
 gem 'popper_js', '~> 1.14.3'
 gem 'iex-ruby-client', '~> 1.1', '>= 1.1.2'
 gem 'devise', '~> 4.7', '>= 4.7.2'
-#gem 'font-awesome-rails', '~> 4.7', '>= 4.7.0.5'
-gem 'font-awesome-sass', '~> 5.13'
-
+#gem 'font-awesome-sass', '~> 5.13'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
@@ -60,7 +60,8 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
-  gem 'chromedriver-helper'
+  #  gem 'chromedriver-helper'   : deprecated
+  gem 'webdrivers', '~> 4.4', '>= 4.4.1'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

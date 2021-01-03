@@ -1,11 +1,11 @@
 <tr>
   <td class="tbl_sm text-center"><%= link_to quote.symbol, quote %><br><small><%=  current_user.get_symbol_qty(quote.symbol) %></small> </td>
-  <td class="text-center"><%= quote.latest_price %></td>
-  <td class="text-center"><%= quote.prev_close %></td>
+  <td class="text-center"><%= to_currency quote.latest_price, precision: 2 %></td>
+  <td class="text-center"><%= to_currency quote.prev_close, precision: 2 %></td>
   <td class="text-center"><%= quote.change %></td>
   <td class="text-center"><%= quote.change_percent_s %></td>
-  <td class="text-center"><%= quote.week52high %></td>
-  <td class="text-center"><%= quote.week52low %></td>
+  <td class="text-center"><%= to_currency quote.week52high, precision: 2 %></td>
+  <td class="text-center"><%= to_currency quote.week52low, precision: 2 %></td>
   <td class="text-center"><%= quote.ytd_change_str %>%</td>
   <td class="tbl_md text-center"><%= quote.latest_update %></td>
   <td class="text-center"><%= link_to '<i class="fas fa-sync-alt"></i>'.html_safe, quote_path(quote), method: :patch  %> </td>

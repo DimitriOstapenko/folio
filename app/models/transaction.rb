@@ -15,7 +15,7 @@ class Transaction < ApplicationRecord
       cash = -(self.qty * self.price + self.fees)
       buy_tr = self.position.transactions.create!(tr_type: BUY_TR, qty: self.qty, price: self.price, cash: cash)
     end
-    self.update_attributes!( qty: 0, price: 0) #, ttl_qty: self.position.qty, acb: self.position.acb )
+    self.update!( qty: 0, price: 0) #, ttl_qty: self.position.qty, acb: self.position.acb )
   end
 
   def set_attributes!
@@ -31,12 +31,12 @@ class Transaction < ApplicationRecord
       self.cash =  -(self.amount + self.fees)  
       self.ttl_cash = self.cash if self.position.transactions.empty?
       self.gain = 0
-      self.note = "bought #{qty} #{self.position.symbol} @ #{self.price}" unless self.note
+      self.note = "bought #{qty} #{self.position.symbol} @ #{sprintf("%.2f", self.price)}" if self.note.blank?
 
     when SELL_TR
       self.qty = -self.qty.abs
-      self.cash = self.amount + self.fees
-      self.note = "sold #{qty.abs} #{self.position.symbol} @ #{self.price}" unless self.note
+      self.cash = self.amount - self.fees
+      self.note = "sold #{qty.abs} #{self.position.symbol} @ #{self.price}" if self.note.blank?
 
     when DIV_TR 
       self.note = "#{self.position.symbol} dividend"
@@ -44,6 +44,7 @@ class Transaction < ApplicationRecord
     when CASH_TR
       self.price = 1.0
       self.acb = self.cash
+#      logger.debug ( "*********** cash tr: #{self.inspect}" )
     else 
       errors.add(:'Transaction Type', "is invalid")
     end
@@ -55,7 +56,7 @@ class Transaction < ApplicationRecord
   end
 
   def locale
-    self.position.currency == EUR ? :fr : :ca 
+    self.position.locale
   end
 
   def tr_type_str
@@ -129,8 +130,8 @@ class Transaction < ApplicationRecord
 #      logger.debug("##### sell tr: amount: #{self.amount} tr: #{self.inspect}")
 
     when CASH_TR
-      self.ttl_cash = self.ttl_acb = prev_ttl_cash + self.cash 
 #      logger.debug ( "*********** cash tr: #{self.inspect}" )
+      self.ttl_cash = self.ttl_acb = prev_ttl_cash + self.cash 
     
     when DIV_TR # not called from positions
 #      logger.debug ( "*********** div tr: #{self.inspect}" )

@@ -1,4 +1,4 @@
-<table class="table table-condensed table-hover table-striped table-bordered" >
+<table class="table table-hover table-striped" >
   <thead class="table-info"> 
       <tr>
           <th class="text-center">Symbol</th>
@@ -9,7 +9,6 @@
           <th class="text-center">Cur. Value (<%= @portfolio.currency_str %>) </th>
           <th class="text-center">Ppr. Gain</th>
           <th class="text-center">Ppr. Gain %</th>
-          <th class="text-center">Cash</th>
           <th></th>
           <th></th>
       </tr>
@@ -25,7 +24,6 @@
     <th class="text-center"><%= to_currency @portfolio.curval %></th>
     <th class="text-center"><%= to_currency @portfolio.ppr_gain  %></th>
     <th class="text-center"><%= sprintf "%.2f", @portfolio.ppr_gain_pc %>%</th>
-    <th class="text-center"><%= to_currency @portfolio.cash  %></th>
     <th colspan=2></th>
   </tfoot>
 </table>
@@ -39,7 +37,7 @@
 
   <% if @portfolio.has_available_cash_position? %>
   <div class="col-md-2 pt-2">
-    <%= button_to "Add Cash Position", new_portfolio_position_path(@portfolio), class: "btn btn-success", method: :get, params: {addcash: 1} %>
+    <%= button_to "Add Cash", new_portfolio_position_path(@portfolio), class: "btn btn-success", method: :get, params: {addcash: 1} %>
   </div>
   <% end %>
 </div>

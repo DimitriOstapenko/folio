@@ -55,9 +55,14 @@ class Portfolio < ApplicationRecord
     CURRENCIES.invert[self.currency]
   end
 
-# Calculate cash in base currency 
+# Calculate cash in portfolio currency  !!! needs fix to use position fx to portfolio
   def cash
-    self.positions.sum(:cash)
+    self.positions.where(pos_type: CASH_POS).sum{|pos| pos.cash}
+  end
+
+# Calculate cash in base currency 
+  def cash_base 
+    self.positions.where(pos_type: CASH_POS).sum{|pos| pos.cash_base}
   end
 
 # Adjusted cost base of all positions in portfolio currency
@@ -79,6 +84,7 @@ class Portfolio < ApplicationRecord
   end
 
   def ppr_gain_pc
+    return 0 if self.ppr_gain.zero?
     self.ppr_gain / self.acb * 100 rescue 0
   end
 

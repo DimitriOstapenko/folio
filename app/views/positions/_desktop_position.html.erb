@@ -1,12 +1,10 @@
-<% locale = position.currency_sym == :EUR ? :fr : :ca %>
 <td class="text-center"><%= link_to position.symbol, portfolio_position_transactions_path(position.portfolio,position), class:"alert-link" %></td>
 <td class="text-center"><%= position.currency_str %></td>
 <td class="text-center"><%= position.qty.to_i %></td>
-<td class="text-center"><%= to_currency position.avg_price, precision: 4, locale: locale %></td>
-<td class="text-center"><%= to_currency position.acb %></td>
-<td class="text-center"><%= to_currency position.curval_base %></td>
+<td class="text-center"><%= to_currency position.avg_price, precision: 4, locale: position.locale %></td>
+<td class="text-center"><%= to_currency position.acb, locale: position.locale %></td>
+<td class="text-center"><%= to_currency position.curval_base  %></td>
 <td class="text-center"><%= to_currency position.ppr_gain %></td>
 <td class="text-center"><%= position.ppr_gain_pc %>%</td>
-<td class="text-center"><%= position.cash %></td>
-<td class="text-center"><%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_portfolio_position_path(position.portfolio,position) %> </td>
-<td class="text-center"><%= link_to '<i class="far fa-trash-alt"></i>'.html_safe, portfolio_position_path(position.portfolio,position), method: :delete, data: { confirm: "Are you sure you want to delete position #{position.symbol}?" } %> </td>
+<td class="text-center"><%= link_to '<i class="bi-pencil-square"></i>'.html_safe, edit_portfolio_position_path(position.portfolio,position) %> </td>
+<td class="text-center"><%= link_to '<i class="bi-trash"></i>'.html_safe, portfolio_position_path(position.portfolio,position), method: :delete, data: { confirm: "Are you sure you want to delete position #{position.symbol}?" } %> </td>
