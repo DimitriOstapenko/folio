@@ -45,8 +45,8 @@ class Quote < ApplicationRecord
     if oldest_point_date > Date.today.beginning_of_year
       hist_chart = IEX_CLIENT.chart(self.symbol + self.exch, '1y') rescue []
       hist_chart.each do |ch|
-        point = Chart.new(symbol:self.symbol, exch:self.exch, date:ch.date, price: ch.close, volume:ch.volume)
-        point.save if point.valid? 
+        point = Chart.new(symbol:self.symbol, exch:self.exch, date:ch.date, price: ch.close, volume:ch.volume) rescue nil
+        point.save if point && point.valid? 
       end
     else
 #     most recent data point      
