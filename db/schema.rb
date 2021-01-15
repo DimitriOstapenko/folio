@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_31_225858) do
+ActiveRecord::Schema.define(version: 2021_01_08_182019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 2020_12_31_225858) do
     t.datetime "date"
     t.float "ttl_cash"
     t.float "ttl_acb"
+    t.boolean "cashdep", default: false
     t.index ["position_id"], name: "index_transactions_on_position_id"
   end
 

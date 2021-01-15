@@ -35,11 +35,9 @@
   </div>
   <% end %>
 
-  <% if @portfolio.has_available_cash_position? %>
   <div class="col-md-2 pt-2">
     <%= button_to "Add Cash", new_portfolio_position_path(@portfolio), class: "btn btn-success", method: :get, params: {addcash: 1} %>
   </div>
-  <% end %>
 </div>
 
 

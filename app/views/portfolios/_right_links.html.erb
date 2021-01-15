@@ -1,9 +1,13 @@
-<% actions = {'holdings': '', 'positions': '', 'dividends': '', 'deposits':'', 'trades':''} %>
+<% actions = {'holdings': '', 'positions': '', 'dividends': '', 'cash': '', 'deposits':'', 'trades':''} %>
 <% actions[action_name] = 'active' %>
-<%= link_to "Holdings", portfolio_holdings_path(@portfolio), class: "btn btn-info btn-sm #{actions['holdings']}" %>
+<% if @portfolio.cashonly? %>
 <%= link_to "Positions", portfolio_positions_path(@portfolio), class: "btn btn-danger btn-sm #{actions['positions']}" %>
+<% else %>
+<%= link_to "Holdings", portfolio_holdings_path(@portfolio), class: "btn btn-info btn-sm #{actions['holdings']}" %>
 <%= link_to "Trades", portfolio_trades_path(@portfolio), class: "btn btn-primary btn-sm #{actions['trades']}" %>
 <%= link_to "Dividends", portfolio_dividends_path(@portfolio), class: "btn btn-warning btn-sm #{actions['dividends']}" %>
+<% end %> 
+<%= link_to "Cash", portfolio_cash_path(@portfolio), class: "btn btn-secondary btn-sm #{actions['cash']}" %>
 <%= link_to "Deposits", portfolio_deposits_path(@portfolio), class: "btn btn-success btn-sm #{actions['deposits']}" %>
 <% if @portfolio.taxable? %>
 <%= link_to "Taxes", portfolio_taxes_path(@portfolio), class: "btn btn-danger btn-sm #{actions['deposits']}" %>

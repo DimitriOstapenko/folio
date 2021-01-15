@@ -19,36 +19,35 @@ class PositionsController < ApplicationController
     @transaction = @position.transactions.new
   end
 
-# Create new position or new cash transaction  
+# Create new position or new cash transaction if already present
   def create
     @portfolio = Portfolio.find(params[:portfolio_id])
     newpos = @portfolio.positions.build(position_params)
     @position = @portfolio.positions.find_by(symbol: newpos.symbol) 
     if @position.present?
       if @position.is_cash?
-        flash[:success] = "Cash added"
         @position.transactions.create!(tr_type: CASH_TR, cash: newpos.qty, acb: newpos.qty, note: newpos.note)
         @position.recalculate
-        redirect_to portfolio_positions_path(@portfolio)
+        flash[:success] = "Cash added"
       else   
         flash[:danger] = "Position #{symbol} is already in portfolio. Try adding transaction"
-        redirect_to portfolio_positions_path(@portfolio)
       end
     else 
       if newpos.save
         @position = newpos 
         flash[:success] = "New position created"
-        redirect_to portfolio_positions_path(@portfolio)
       else
         render 'new'
+        return
       end
     end
+    redirect_to portfolio_holdings_path(@portfolio)
   end
 
   def destroy
     @position.destroy
     flash[:success] = "Position #{@position.symbol} deleted. "
-    redirect_to portfolio_positions_path(@portfolio)
+    redirect_to portfolio_holdings_path(@portfolio)
   end
 
   def edit
@@ -61,7 +60,7 @@ class PositionsController < ApplicationController
   def update
     if @position.update(position_params)
       flash[:success] = "Position updated"
-      redirect_to portfolio_positions_path(@portfolio)
+      redirect_to portfolio_holdings_path(@portfolio)
     else
       render 'edit'
     end
@@ -72,7 +71,7 @@ class PositionsController < ApplicationController
   def init
     @portfolio = Portfolio.find(params[:portfolio_id]) rescue nil
     @position = Position.find(params[:id]) rescue nil
-    (flash[:warning]="Position not found"; redirect_to portfolio_positions_path) unless @position
+    (flash[:warning]="Position not found"; redirect_to portfolio_holdings_path) unless @position
   end
 
   def position_params

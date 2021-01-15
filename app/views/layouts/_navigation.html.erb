@@ -8,7 +8,7 @@
         <li class="<%= "active nav-item" if controller_name == 'quotes' %>"><%= link_to "<i class='bi-question-circle'></i> Quotes".html_safe, quotes_path, class: "nav-link" %></li>
         <li class="<%= "active nav-item" if controller_name == 'static_pages' %>"><%= link_to "<i class='bi-graph-up'></i> Net Worth".html_safe, chart_path, class: "nav-link" %></li>
       <% else %>
-        <li class="login_link"><%= link_to "<i class='fa fa-sign-in-alt'></i> Login".html_safe, new_user_session_path %></li>
+        <li class="login_link"><%= link_to "<i class='bi-box-arrow-in-right'></i> Login".html_safe, new_user_session_path %></li>
       <% end %>
       </ul>
     </div>

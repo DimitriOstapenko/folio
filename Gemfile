@@ -20,7 +20,7 @@ gem 'image_processing', '~> 1.12', '>= 1.12.1'
 # custom
 gem 'bootstrap', '~> 4.5', '>= 4.5.3'
 #gem 'bootstrap', '~> 5.0.0.beta1'
-gem 'bootstrap-icons', '~> 1.0', '>= 1.0.5'
+#gem 'bootstrap-icons', '~> 1.0', '>= 1.0.5'
 
 gem 'sprockets-rails', '~> 3.2', '>= 3.2.1'
 gem 'will_paginate', '~> 3.3'

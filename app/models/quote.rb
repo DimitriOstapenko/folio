@@ -42,16 +42,16 @@ class Quote < ApplicationRecord
   def update_chart
     oldest_point_date = Chart.where(symbol: self.symbol).where(exch: self.exch).last.date rescue Date.today
 
-    if oldest_point_date > Date.today.beginning_of_year
+    if oldest_point_date > Date.today.beginning_of_year   # get chart data from 1yr back
       hist_chart = IEX_CLIENT.chart(self.symbol + self.exch, '1y') rescue []
       hist_chart.each do |ch|
         point = Chart.new(symbol:self.symbol, exch:self.exch, date:ch.date, price: ch.close, volume:ch.volume) rescue nil
         point.save if point && point.valid? 
       end
     else
-#     most recent data point      
-      latest = IEX_CLIENT.chart(self.symbol + self.exch, '5d').last
-      Chart.create(symbol:self.symbol, exch:self.exch, date:latest.date, price: latest.close, volume: latest.volume)
+#     just add most recent data point      
+      latest = IEX_CLIENT.chart(self.symbol + self.exch, '5d').last rescue nil
+      Chart.create(symbol:self.symbol, exch:self.exch, date:latest.date, price: latest.close, volume: latest.volume) if latest
       self.update_attribute(:volume, latest.volume)
     end
   end  

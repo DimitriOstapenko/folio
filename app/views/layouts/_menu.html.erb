@@ -5,8 +5,8 @@
     <i class="bi-list text-muted" style="font-size: 1.8rem"></i><!-- <i class="fa fa-bars fa-lg text-muted"></i> -->
   </a>
   <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-     <%= link_to "<i class='fa fa-edit'></i> My Profile".html_safe, edit_user_registration_path(current_user.id), class: "dropdown-item" %>
-     <%= link_to "<i class='fa fa-sign-out-alt'></i> Logout".html_safe, destroy_user_session_path, method: :delete, class: "dropdown-item" %>
+     <%= link_to "<i class='bi-person-fill'></i> My Profile".html_safe, edit_user_registration_path(current_user.id), class: "dropdown-item" %>
+     <%= link_to "<i class='bi-box-arrow-right'></i> Logout".html_safe, destroy_user_session_path, method: :delete, class: "dropdown-item" %>
   </div>
 </div>
 </ul>

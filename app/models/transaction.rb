@@ -9,6 +9,7 @@ class Transaction < ApplicationRecord
 #  validate :validate_tr
 
   after_create :add_dividend, if: Proc.new { |tr| tr.dividend? }
+  after_create :update_cash
 
   def add_dividend
     if self.qty > 0  # Add cash tr [and buy tr], then add div
@@ -16,6 +17,26 @@ class Transaction < ApplicationRecord
       buy_tr = self.position.transactions.create!(tr_type: BUY_TR, qty: self.qty, price: self.price, cash: cash)
     end
     self.update!( qty: 0, price: 0) #, ttl_qty: self.position.qty, acb: self.position.acb )
+  end
+
+# Cash position updates after buy or sell  
+  def update_cash
+    if (self.tr_type == BUY_TR) || (self.tr_type == SELL_TR) 
+      pos = self.get_cash_position
+      return unless pos
+      if self.tr_type == BUY_TR
+        note = "bought #{self.qty} #{self.position.symbol} @ #{sprintf("%.2f", self.price)}" 
+      else 
+        note = "sold #{self.qty.abs} #{self.position.symbol} @ #{sprintf("%.2f", self.price)}" 
+      end
+      pos.transactions.create!(tr_type: CASH_TR, cash: self.cash, acb: -self.cash, note: note) 
+      pos.recalculate
+    end 
+  end
+
+# get base cash position of current portfolio 
+  def get_cash_position
+    self.position.portfolio.positions.find_by(symbol: 'CAD') rescue nil
   end
 
   def set_attributes!
@@ -36,7 +57,7 @@ class Transaction < ApplicationRecord
     when SELL_TR
       self.qty = -self.qty.abs
       self.cash = self.amount - self.fees
-      self.note = "sold #{qty.abs} #{self.position.symbol} @ #{self.price}" if self.note.blank?
+      self.note = "sold #{qty.abs} #{self.position.symbol} @ #{sprintf("%.2f", self.price)}" if self.note.blank?
 
     when DIV_TR 
       self.note = "#{self.position.symbol} dividend"

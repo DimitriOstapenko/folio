@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   resources :quotes #, :users
   resources :portfolios do
-    get 'trades', 'dividends', 'deposits', 'holdings', 'taxes'
+    get 'trades', 'dividends', 'cash', 'deposits', 'holdings', 'taxes'
     resources :positions do 
       resources :transactions
     end

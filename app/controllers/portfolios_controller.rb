@@ -1,7 +1,7 @@
 class PortfoliosController < ApplicationController
 
   before_action :logged_in_user
-  before_action :init, only: [:show, :edit, :update, :destroy, :add_cash, :dividends, :deposits, :holdings, :transactions, :taxes, :trades ]
+  before_action :init #, only: [:show, :edit, :update, :destroy, :add_cash, :dividends, :cash, :deposits, :holdings, :transactions, :taxes, :trades ]
   
   helper_method :sort_column, :sort_direction
 
@@ -76,9 +76,14 @@ class PortfoliosController < ApplicationController
 
 #    flash[:warning] = "Portfolio: #{@portfolio.inspect}"
   end
+  
+  def cash
+    @cash = Transaction.joins(:position).where('positions.portfolio_id': @portfolio.id).where(tr_type: CASH_TR)
+    @cash = @cash.paginate(page: params[:page])
+  end
 
   def deposits
-    @deposits = Transaction.joins(:position).where('positions.portfolio_id': @portfolio.id).where(tr_type: CASH_TR)
+    @deposits = Transaction.joins(:position).where('positions.portfolio_id': @portfolio.id).where(tr_type: CASH_TR).where(cashdep:true)
     @deposits = @deposits.paginate(page: params[:page])
   end
   
@@ -100,6 +105,7 @@ class PortfoliosController < ApplicationController
 
   def init
     id = params[:portfolio_id] || params[:id]
+    return unless id
     @portfolio = Portfolio.find(id)
 
     if @portfolio.present?

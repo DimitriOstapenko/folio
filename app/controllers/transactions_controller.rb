@@ -19,7 +19,7 @@ class TransactionsController < ApplicationController
     if @transaction.save!
       @position.recalculate
       flash[:success] = "New transaction added"
-      redirect_to portfolio_position_transactions_path(@portfolio, @position)
+      redirect_to portfolio_holdings_path(@portfolio)
     else 
       render 'new'
     end
@@ -33,7 +33,7 @@ class TransactionsController < ApplicationController
      else 
        flash[:danger] = "Error deleting transaction"
      end
-     redirect_to portfolio_position_transactions_path(@portfolio,@position)
+     redirect_to portfolio_holdings_path(@portfolio)
   end
 
   def edit
@@ -49,7 +49,7 @@ class TransactionsController < ApplicationController
     else 
       flash[:danger] = "Error updating transaction"
     end
-    redirect_to portfolio_position_transactions_path(@portfolio,@position)
+    redirect_to portfolio_holdings_path(@portfolio)
   end
 
 private
@@ -64,7 +64,7 @@ private
   end
 
   def transaction_params
-    params.require(:transaction).permit( :qty, :price, :tr_type, :fees, :acb, :gain, :ttl_qty, :cash, :ttl_cash, :ttl_acb, :note, :date )
+    params.require(:transaction).permit( :qty, :price, :tr_type, :fees, :acb, :gain, :ttl_qty, :cash, :ttl_cash, :ttl_acb, :note, :date, :cashdep )
   end
 
   def sort_column

@@ -1,0 +1,9 @@
+<tr>
+  <td class="text-center"><%= cash.date %></td>
+  <td class="text-center"><%= cash.position.symbol %></td>
+  <td class="text-center"><%= cash.cash %></td>
+  <td class="text-center"><%= cash.ttl_cash %></td>
+  <td class="text-center"><%= cash.note %></td>
+  <td class="text-center"><%= link_to '<i class="bi-pencil-square"></i>'.html_safe, edit_portfolio_position_transaction_path(@portfolio,cash.position,cash) %> </td>
+  <td class="text-center"><%= link_to '<i class="bi-trash"></i>'.html_safe, portfolio_position_transaction_path(@portfolio,cash.position,cash), method: :delete, data: { confirm: "Delete transaction #{cash.cash} #{cash.position.symbol}?" } %></td>
+</tr>

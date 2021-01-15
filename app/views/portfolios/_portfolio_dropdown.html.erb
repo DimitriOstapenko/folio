@@ -1,16 +1,17 @@
 <!-- portfolio dropdown in submenu -->
+<% action = action_name == 'index' ? 'holdings' : action_name %>
 <div class="dropdown show pb-1 ml-2 lead">
   <a class="dropdown-toggle nounderline" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <b><%= @portfolio.name %> (<%= @portfolio.currency_str %>) : <%= action_name.pluralize.capitalize %></b>
+    <b><%= @portfolio.name %> (<%= @portfolio.currency_str %>) : <%= action.pluralize.capitalize %></b>
   </a>
 
   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
   <% current_user.portfolios.each do |port| %>
-    <%= link_to port.name, eval("portfolio_#{action_name}_path(port)"), class: "dropdown-item" %> 
+    <%= link_to port.name, eval("portfolio_#{action}_path(port)"), class: "dropdown-item" %> 
   <% end %>
   </div>
   
-  <span class="pl-5"> Cash: <%= to_currency @portfolio.cash_base %> </span>
+  <span class="pl-5"><%= link_to "Cash: #{to_currency @portfolio.cash_base}", '#' %> </span>
 </div>
 
 
