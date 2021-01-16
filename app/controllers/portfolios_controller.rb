@@ -98,7 +98,12 @@ class PortfoliosController < ApplicationController
   end
 
   def taxes
-#    @taxes = Transaction.joins(:position).merge(Position.joins(:portfolio)).where('positions.portfolio.id': @portfolio.id).where('portfolios.taxable': true)
+    @year = params[:portfolio][:year] rescue Time.now.year
+    @sdate = "#{@year}-01-01".to_date
+    @edate = @sdate.end_of_year
+#    @transactoons = Transaction.joins(:position).merge(Position.joins(:portfolio)).
+#      where('positions.portfolio.id': @portfolio.id).where('transactions.date': (sdate..edate)).
+#      where('transactions.tr_type': (BUY_TR..SELL_TR))
   end
 
   private
@@ -116,7 +121,7 @@ class PortfoliosController < ApplicationController
   end
 
   def portfolio_params
-    params.require(:portfolio).permit( :name, :currency, :cashonly, :taxable, :cash_in )
+    params.require(:portfolio).permit( :name, :currency, :cashonly, :taxable, :cash_in, :year )
   end
 
   def sort_column

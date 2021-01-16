@@ -3,7 +3,7 @@
 
   <%= f.hidden_field :symbol %>
   <%# currencies = (action_name == 'new')? CURRENCIES.except(@portfolio.currency_sym) : CURRENCIES %>
-
+  
   <div class="row">
   <div class="col-md-3">
   <%= f.input :currency, collection: CURRENCIES, include_blank: false %>

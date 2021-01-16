@@ -1,6 +1,13 @@
 <!-- portfolio dropdown and cash link -->
 <div class="row ml-0">
   <%= render "/portfolios/portfolio_dropdown" %>
+  <% if action_name == 'taxes'  %>
+    <div class="pl-5 lead">
+      <%= simple_form_for @portfolio, url: portfolio_taxes_path(@portfolio), method: :post, html: { class: "form" } do |f| %>
+        <%= f.input :year, collection: [Time.now.year, Time.now.year-1], include_blank: 'Tax Year',  label: false, input_html: {onchange: 'this.form.submit();'} %>
+      <% end %>
+    </div>
+  <% end %>
   <div class="ml-auto mr-3">
     <%= render "/portfolios/right_links" %>
   </div>

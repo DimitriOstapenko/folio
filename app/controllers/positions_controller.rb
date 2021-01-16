@@ -26,7 +26,7 @@ class PositionsController < ApplicationController
     @position = @portfolio.positions.find_by(symbol: newpos.symbol) 
     if @position.present?
       if @position.is_cash?
-        @position.transactions.create!(tr_type: CASH_TR, cash: newpos.qty, acb: newpos.qty, note: newpos.note)
+        @position.transactions.create!(tr_type: CASH_TR, cash: newpos.qty, acb: newpos.qty, note: newpos.note, cashdep: true)
         @position.recalculate
         flash[:success] = "Cash added"
       else   

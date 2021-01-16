@@ -6,6 +6,7 @@ class Portfolio < ApplicationRecord
   validates :name, presence: true, length: { maximum: 50 }
   validates :currency, presence: true, numericality: true
   attr_accessor :cash_in # passing this to new position on portfolio creation
+  attr_accessor :year # need this one for taxes page
 
   default_scope -> { order(name: :asc) }
 
