@@ -1,12 +1,15 @@
 <%= render "header" %>  
+<% year = Time.now.year %>
 
 <table class="table table-hover table-striped"> 
   <thead>
       <tr>
-        <th class="text-center">Date</th>
-        <th class="text-center">Symbol</th>
-        <th class="text-center">Quantity</th>
-        <th class="text-center">Notes</th>
+        <th>Symbol</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Drip?</th>
+        <th>Notes</th>
+        <th colspan=2/>
       </tr>
   </thead>
   <tbody>
@@ -14,6 +17,12 @@
 <%= render partial: "dividend", collection: @dividends %>
 
  </tbody>
+ <tfoot>
+   <th>Totals in CAD: </th>
+   <th></th>
+   <th><%= @portfolio.dividends(year) %></th>
+   <th colspan=4></th>
+ </tfoot>
 </table>
 
 <%= will_paginate @dividends, class: "btn" %>

@@ -2,7 +2,7 @@ class Transaction < ApplicationRecord
   belongs_to :position
   default_scope -> { order(date: :desc) }
 
-  validates :qty, presence: true, numericality: true, if: Proc.new { |tr|  !tr.dividend? } 
+  validates :qty, presence: true, numericality: {other_than: 0}, if: Proc.new { |tr|  tr.buy? || tr.sell?  } 
   validates :tr_type, presence: true, inclusion: { in: TRANSACTION_TYPES.values, message: "%{value} is invalid transaction type"}
 
   before_validation :set_attributes!
@@ -14,7 +14,7 @@ class Transaction < ApplicationRecord
   def add_dividend
     if self.qty > 0  # Add cash tr [and buy tr], then add div
       cash = -(self.qty * self.price + self.fees)
-      buy_tr = self.position.transactions.create!(tr_type: BUY_TR, qty: self.qty, price: self.price, cash: cash)
+      buy_tr = self.position.transactions.create!(tr_type: BUY_TR, qty: self.qty, price: self.price, cash: cash, drip: true)
     end
     self.update!( qty: 0, price: 0) #, ttl_qty: self.position.qty, acb: self.position.acb )
   end
@@ -60,7 +60,9 @@ class Transaction < ApplicationRecord
       self.note = "sold #{qty.abs} #{self.position.symbol} @ #{sprintf("%.2f", self.price)}" if self.note.blank?
 
     when DIV_TR 
-      self.note = "#{self.position.symbol} dividend"
+      self.drip = true if self.qty
+      suff = "with DRIP" if self.drip
+      self.note = "#{self.position.symbol} dividend #{suff}"
 
     when CASH_TR
       self.price = 1.0
@@ -85,7 +87,7 @@ class Transaction < ApplicationRecord
   end
 
   def amount
-    if self.cash?
+    if self.cash? || self.dividend?
       self.cash
     else
       (self.price * self.qty).abs rescue 0
@@ -139,7 +141,7 @@ class Transaction < ApplicationRecord
       self.ttl_cash = prev_ttl_cash + self.cash
       self.acb = self.amount + self.fees
       self.ttl_acb = prev_ttl_acb + self.acb
-#      logger.debug ( "*********** buy tr: #{self.inspect}" )
+      logger.debug ( "*********** buy tr: #{self.inspect}" )
 
     when SELL_TR
       self.ttl_qty = prev_ttl_qty + self.qty 

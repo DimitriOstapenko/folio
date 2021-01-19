@@ -19,7 +19,8 @@
 
   </tbody>
   <tfoot>
-    <th colspan=4>Totals in <%= @portfolio.currency_str %></th>
+    <th>Totals in <%= @portfolio.currency_str %></th>
+    <th colspan=3></th>
     <th class="text-center"><%= to_currency @portfolio.acb %></th>
     <th class="text-center"><%= to_currency @portfolio.curval %></th>
     <th class="text-center"><%= to_currency @portfolio.ppr_gain  %></th>

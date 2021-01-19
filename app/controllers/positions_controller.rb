@@ -26,11 +26,13 @@ class PositionsController < ApplicationController
     @position = @portfolio.positions.find_by(symbol: newpos.symbol) 
     if @position.present?
       if @position.is_cash?
-        @position.transactions.create!(tr_type: CASH_TR, cash: newpos.qty, acb: newpos.qty, note: newpos.note, cashdep: true)
+        pos=params[:position]
+        date = Date.new(pos["date(1i)"].to_i, pos["date(2i)"].to_i, pos["date(3i)"].to_i)
+        @position.transactions.create!(tr_type: CASH_TR, cash: newpos.qty, acb: newpos.qty, note: newpos.note, cashdep: true, date: date  )
         @position.recalculate
         flash[:success] = "Cash added"
       else   
-        flash[:danger] = "Position #{symbol} is already in portfolio. Try adding transaction"
+        flash[:danger] = "Position #{newpos.symbol} is already in portfolio. Try adding transaction"
       end
     else 
       if newpos.save
@@ -75,7 +77,7 @@ class PositionsController < ApplicationController
   end
 
   def position_params
-    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency, :avg_price, :cash, :fees, :gain, :note, :pos_type )
+    params.require(:position).permit( :symbol, :exch, :qty, :acb, :currency, :avg_price, :cash, :fees, :gain, :note, :pos_type, :date )
   end
 
   def sort_column

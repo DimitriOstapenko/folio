@@ -1,16 +1,15 @@
-<% scroll = "table-responsive" if mobile_device? %>
-
 <%= render "header" %>
 
-<table class="table table-hover table-striped <%= scroll %>"> 
+<div class="table-responsive">
+<table class="table table-hover table-striped"> 
   <thead>
       <tr>
-        <th class="text-center">Date</th>
-        <th class="text-center">Symbol</th>
-        <th class="text-center">Quantity</th>
-        <th class="text-center">Total</th>
-        <th class="text-center">Notes</th>
-        <th colspan=2 />
+        <th>Date</th>
+        <th>Symbol</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Notes</th>
+        <th colspan=2/>
       </tr>
   </thead>
   <tbody>
@@ -19,9 +18,15 @@
 
  </tbody>
 </table>
+</div>
 
+<div class="row">
 <%= will_paginate @deposits, class: "btn" %>
 
 <div class="col-md-2 pt-2">
   <%= button_to "Add Cash", new_portfolio_position_path(@portfolio), class: "btn btn-success", method: :get, params: {addcash: 1} %>
 </div>
+
+</div>
+
+

@@ -1,9 +1,9 @@
 <tr>
-  <td class="text-center"><%= deposit.date %></td>
-  <td class="text-center"><%= deposit.position.symbol %></td>
-  <td class="text-center"><%= deposit.cash %></td>
-  <td class="text-center"><%= deposit.ttl_cash %></td>
-  <td class="text-center"><%= deposit.note %></td>
-  <td class="text-center"><%= link_to '<i class="bi-pencil-square"></i>'.html_safe, edit_portfolio_position_transaction_path(@portfolio,deposit.position,deposit) %> </td>
-  <td class="text-center"><%= link_to '<i class="bi-trash"></i>'.html_safe, portfolio_position_transaction_path(@portfolio,deposit.position,deposit), method: :delete, data: { confirm: "Delete transaction #{deposit.cash} #{deposit.position.symbol}?" } %></td>
+  <td><%= deposit.date.to_date %></td>
+  <td><%= deposit.position.symbol %></td>
+  <td><%= deposit.cash %></td>
+  <td><%= deposit.ttl_cash %></td>
+  <td><%= deposit.note %></td>
+  <td><%= link_to '<i class="bi-pencil-square"></i>'.html_safe, edit_portfolio_position_transaction_path(@portfolio,deposit.position,deposit) %> </td>
+  <td><%= link_to '<i class="bi-trash"></i>'.html_safe, portfolio_position_transaction_path(@portfolio,deposit.position,deposit), method: :delete, data: { confirm: "Delete transaction #{deposit.cash} #{deposit.position.symbol}?" } %></td>
 </tr>

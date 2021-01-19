@@ -3,36 +3,32 @@
 <table class="table table-hover table-striped <%= scroll %>"> 
   <thead>
       <tr>
-        <th class="text-center">Date</th>
-        <th class="text-center">Symbol</th>
-        <th class="text-center">Type</th>
-        <th class="text-center">Quantity</th>
-        <th class="text-center">Price</th>
-        <th class="text-center">Amount</th>
-        <th class="text-center">Comm.</th>
-        <th class="text-center">Cap Gain</th>
-        <th class="text-center">Share Balance</th>
-        <th class="text-center">ACB</th>
-        <th class="text-center">ACB/Share</th>
-        <th class="text-center">Notes</th>
-        <th></th>
-        <th></th>
+        <th>Date</th>
+        <th>Symbol</th>
+        <th>Type</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Amount</th>
+        <th>Comm.</th>
+        <th>Cap Gain</th>
+        <th>Share Balance</th>
+        <th>ACB</th>
+        <th>ACB/Share</th>
+        <th>Notes</th>
+        <th colspan=2></th>
       </tr>
   </thead>
   <tbody>
 
-<%# render partial: "transaction", collection: @transactions %>
 <%= render  @transactions %>
 
  </tbody>
   <tfoot>
-    <th colspan=3>Totals in <%= @portfolio.currency_str %></th>
-    <th class="text-center"></th>
-    <th colspan=2></th>
-    <th class="text-center"><%= to_currency @portfolio.fees, locale: @portfolio.locale %></th>
-    <th class="text-center"><%= to_currency @portfolio.gain, locale: @portfolio.locale %></th>
-    <th colspan=3></th>
-    <th colspan=3></th>
+    <th>Totals in <%= @portfolio.currency_str %></th>
+    <th colspan=5></th>
+    <th><%= to_currency @portfolio.fees, locale: @portfolio.locale %></th>
+    <th><%= to_currency @portfolio.gain, locale: @portfolio.locale %></th>
+    <th colspan=6></th>
   </tfoot>
 </table>
 

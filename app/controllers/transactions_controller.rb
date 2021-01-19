@@ -16,7 +16,7 @@ class TransactionsController < ApplicationController
   def create
 #    logger.debug("**** #{@position.inspect} ") 
     @transaction = @position.transactions.build(transaction_params)
-    if @transaction.save!
+    if @transaction.save
       @position.recalculate
       flash[:success] = "New transaction added"
       redirect_to portfolio_holdings_path(@portfolio)

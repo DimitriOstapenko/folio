@@ -9,7 +9,12 @@ Bundler.require(*Rails.groups)
 module Folio
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    config.load_defaults 6.1
+    config.autoload_paths << "#{Rails.root}/lib"
+
+    I18n.enforce_available_locales = false
+    I18n.config.available_locales = [:en]
+    config.i18n.default_locale = :en
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -17,8 +22,12 @@ module Folio
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
+
+    config.time_zone = "America/New_York"
+    config.active_record.default_timezone = :local
+    config.active_record.time_zone_aware_attributes = false
+
     # config.eager_load_paths << Rails.root.join("extras")
 
-#     config.assets.paths << Rails.root.join('node_modules')
   end
 end

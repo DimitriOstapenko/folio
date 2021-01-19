@@ -3,6 +3,7 @@ class Position < ApplicationRecord
   belongs_to :portfolio, inverse_of: :positions
   has_many :transactions, dependent: :destroy, autosave: true
   default_scope -> { order(symbol: :asc) }
+  attr_accessor :date # to pass to cash transactions
 
   before_validation :set_attributes!
 
@@ -119,6 +120,11 @@ class Position < ApplicationRecord
   def ppr_gain_pc
     return 0 if self.acb.abs < 0.01
     sprintf("%.2f", self.ppr_gain / self.acb * 100) rescue 0
+  end
+
+# Sum of Dividends for given year 
+  def dividends(year = Time.now.year)
+    self.transactions.where(tr_type: DIV_TR).sum{|tr| tr.amount } * self.fx_rate
   end
 
 # Recalculate position after change of one of the transactions

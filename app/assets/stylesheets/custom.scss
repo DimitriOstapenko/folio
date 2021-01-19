@@ -291,13 +291,19 @@ select {
   width: 30%;
 }
 
-thead  th{
+thead th{
   background: $brand-info;  //#17a2b8; // bs5 info
   color: white;
+  text-align:center;
+}
+
+tfoot th{
+  text-align:center;
 }
 
 .table td{
   padding: 3px;
+  text-align:center;
 }
 
 caption {
@@ -308,9 +314,10 @@ caption {
     background: $gray-lighter; //#5bc0de;
 }
 
-.table-wrapper-scroll-x {
+.table-wrapper-scroll-x, .table-responsive {
  display: block;
  overflow: auto;
+//  overflow-y: visible !important;
 }
 
 .alert div,
@@ -381,9 +388,6 @@ cursor: pointer;
   font-size: .9em;
 }
 
-.table-responsive {
-  overflow-y: visible !important;
-}
 
 
 // Move page down to make anchors visible

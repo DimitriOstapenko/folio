@@ -94,6 +94,11 @@ class Portfolio < ApplicationRecord
     self.positions.sum(:gain) 
   end
 
+# Dividends for given year
+  def dividends(year)
+    self.positions.sum{|pos| pos.dividends(year)}
+  end  
+
 # check if position in one or more of the supported currencies is not in portfolio yet  
   def has_available_cash_position?
     avail = CURRENCIES.keys
