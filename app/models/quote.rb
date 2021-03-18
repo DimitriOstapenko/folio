@@ -27,9 +27,9 @@ class Quote < ApplicationRecord
     return true unless self.latest_update.present? # new quote
     return true if self.exch == '' && Date.current.on_weekday?   # US feed is real time  (&& self.latest_update < 15.minutes.ago  for cached)
     if Date.today.sunday? || Date.current.monday?
-      return true if self.updated_at < 2.days.ago        
+      return true if self.latest_update < 2.days.ago        
     else 
-      return true if self.updated_at < 1.day.ago  
+      return true if self.latest_update < 1.day.ago  
     end
     return false
   end
@@ -50,9 +50,10 @@ class Quote < ApplicationRecord
       end
     else
 #     just add most recent data point      
-      latest = IEX_CLIENT.chart(self.symbol + self.exch, '5d').last rescue nil
+      latest = IEX_CLIENT.chart(self.symbol.gsub('-','.') + self.exch, '5d').last rescue nil
+      (puts "could not get IEX chart for #{self.symbol}"; return) unless latest
       Chart.create(symbol:self.symbol, exch:self.exch, date:latest.date, price: latest.close, volume: latest.volume) if latest
-      self.update_attribute(:volume, latest.volume)
+      self.update_attribute(:volume, latest.volume) 
     end
   end  
 

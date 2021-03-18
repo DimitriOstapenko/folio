@@ -59,7 +59,7 @@ class Position < ApplicationRecord
 
 # Position cash in base currency
   def cash_base
-    self.cash * self.fx_rate    
+    (self.cash + self.dividends) * self.fx_rate    
   end  
 
 # Return currency symbol (:CAD, :EUR, :USD) 

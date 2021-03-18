@@ -4,10 +4,10 @@
   <div class="col-md-1 col-sm-2">
   <%= f.input :symbol, label: false, placeholder: 'Symbol' %>
   </div>
-  <div class="col-md-1 col-sm-3">
+  <div class="col-md-2 col-sm-3">
     <%= f.input :exch, collection: EXCHANGES, include_blank: false, label: false %>
   </div>
-  <div class="col-md-1 col-sm-2">
+  <div class="col-md-2">
   <%= f.submit 'Get Quote', class: "btn btn-info" %>
   </div>
 </div>

@@ -58,12 +58,13 @@ class Portfolio < ApplicationRecord
 
 # Calculate cash in portfolio currency  
   def cash
-    self.positions.where(pos_type: CASH_POS).sum{|pos| pos.cash_base}  # in portfolio currency
+    cash = self.positions.where(pos_type: CASH_POS).sum{|pos| pos.cash_base}  # in portfolio currency
+    cash += self.positions.where(pos_type: STOCK_POS).sum{|pos| pos.dividends} 
   end
 
 # Calculate cash in base currency (CAD) 
   def cash_base 
-    self.positions.where(pos_type: CASH_POS).sum{|pos| pos.cash_base} * self.fx_rate  # in CAD
+    self.cash * self.fx_rate  # in CAD
   end
 
 # Adjusted cost base of all positions in portfolio currency
