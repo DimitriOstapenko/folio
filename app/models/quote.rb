@@ -150,8 +150,9 @@ def news
   exch = ''; news = []
   exch = '.TO' if self.exch == '-CT'
   uri = 'http://finance.yahoo.com/rss/headline?s='+ self.symbol + exch
-  puts uri
-  rss = open(uri)
+# spoofing yahoo news trap  
+  user_agent = { "User-Agent" => "Mozilla/5.0 (iPhone; U; CPU like Mac OS X; en) AppleWebKit/420+ (KHTML, like Gecko) Version/3.0 Mobile/1C25 Safari/419.3" }
+  rss = open(uri,user_agent)
   feed = RSS::Parser.parse(rss)
   feed.items.each do |item|
     news.push({ title: item.title, date: item.pubDate, link: item.link, description: item.description })

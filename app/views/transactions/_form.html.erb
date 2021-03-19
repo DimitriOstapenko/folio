@@ -44,6 +44,16 @@ $(document).ready(function () {
    (tr_type.val() == div) ? $('#cashdiv').show() : $('#cashdiv').hide();
    (tr_type.val() == div ) ? $('#fees').hide() : $('#fees').show();
    tr_type.change(function () {
+     if (tr_type.val() == div ) {
+       $('label[for="transaction_qty"]').text('DRIP Shares');
+       $('#cashdiv').show();
+       $('#fees').hide();
+     } else{
+       $('label[for="transaction_qty"]').text('Shares');
+       $('#cashdiv').hide();
+       $('#fees').show();
+     } 
+
      (tr_type.val() == div ) ? $('#cashdiv').show() : $('#cashdiv').hide();
      (tr_type.val() == div ) ? $('#fees').hide() : $('#fees').show();
    });
